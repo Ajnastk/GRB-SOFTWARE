@@ -28,7 +28,7 @@ const Signup = () => {
                             id="userName"
                             placeholder="Type your username"
                             required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
                     </div>
 
@@ -46,7 +46,7 @@ const Signup = () => {
                             id="userEmail"
                             placeholder="Type your email"
                             required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
                     </div>
 
@@ -65,7 +65,7 @@ const Signup = () => {
                             placeholder="Type your mobile number"
                             pattern="[0-9]{10}"
                             required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
                     </div>
 
@@ -83,7 +83,7 @@ const Signup = () => {
                             id="userPassword"
                             placeholder="Type your password"
                             required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
                         <button
                             type="button"
@@ -108,7 +108,7 @@ const Signup = () => {
                             id="userConfirmPassword"
                             placeholder="Confirm your password"
                             required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
                         <button
                             type="button"

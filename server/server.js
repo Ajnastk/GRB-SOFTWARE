@@ -8,7 +8,7 @@ const PORT=process.env.PORT || 5000;
 const MONGO_URL=process.env.MONGO_URI;
 
 
-app.use(express.json()); // To parse JSON body
+app.use(express.json()); 
 
 app.use('/api',reviewRoutes);
 

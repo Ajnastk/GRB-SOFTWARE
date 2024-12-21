@@ -7,7 +7,7 @@ router.post('/admin-signup',Signup);
 router.post('/admin-login',Login);
 
 
-router.get('/protected-route',authmiddlware,(req,res)=>{
-    res.status(200).json({message:'this is protected route',admin:req.admin})
-})
+// router.get('/protected-route',authmiddlware,(req,res)=>{
+//     res.status(200).json({message:'this is protected route',admin:req.admin})
+// })
 module.exports=router;

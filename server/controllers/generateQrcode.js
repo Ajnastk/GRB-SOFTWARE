@@ -9,7 +9,9 @@ const generateQrcode = async (req,res)=>{
 
         const qrCodeDataURL = await QrCode.toDataURL(url);
 
-        res.status(200).json({ qrCode: qrCodeDataURL });
+        res.status(200).json(
+            { qrCode: qrCodeDataURL });
+        
     }catch(error){
         console.error('Error generating qr code',error);
         res.status(500).json({ error: 'Failed to generate QR Code' });

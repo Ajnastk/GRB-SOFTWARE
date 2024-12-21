@@ -1,5 +1,7 @@
 import { useState } from "react";
+
 import { Link } from "react-router-dom";
+
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);

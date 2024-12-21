@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function Login() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-blue-600">
@@ -34,7 +35,7 @@ function Login() {
                             Submit
                         </button>
                         {/* Uncomment the link below to use the Register page */}
-                        {/* <Link to="/register" className="text-indigo-600 hover:text-indigo-700">Register</Link> */}
+                        <Link to="/signup" className="text-indigo-600 hover:text-indigo-700">Register</Link>
                     </div>
                 </form>
             </main>

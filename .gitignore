@@ -9,10 +9,12 @@ server/node_modules/
 .DS_Store
 
 # Ignore environment variables
-.env
+.env/
 
 # Ignore build directories (if any)
 client/build/
 server/build/
 
 # Ignore any other directories or files specific to your project
+
+

@@ -3,7 +3,6 @@ const express=require('express');
 const dotenv=require('dotenv').config();
 
 const cors=require('cors');
-const AuthMiddlware=require('./middlewares/authmiddlware');
 const Authroute=require('./routes/authRoutes');
 
 const reviewRoutes = require('./routes/ReviewRoute') 
@@ -14,7 +13,7 @@ const MONGO_URL=process.env.MONGO_URI;
 
 
 app.use(cors());
-app.use(AuthMiddlware);
+
 
 app.use(express.json());
 app.use('/api',Authroute);

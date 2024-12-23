@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 
 const Signup = async (req, res) => {
   try {
-    const { name, email, mobile, password } = req.body;
+    const { name, email, mobile, password,googlelink } = req.body;
 
     const hashPassword = await bcrypt.hash(password, 10);
 
@@ -13,6 +13,7 @@ const Signup = async (req, res) => {
       email,
       mobile,
       password: hashPassword,
+      googlelink: googlelink?.trim(),
     });
      const getId =await NewAdmin.save();
 

@@ -1,12 +1,48 @@
 import { useState } from "react";
 import TextInput from "./TextInput";
+import axios from "axios";
 
 const Rating = () => {
   const [selectedRating, setSelectedRating] = useState(0); // No star selected initially
+  const [textInput,setTextInput] =useState("");
 
   const handleRatingChange = (rating) => {
     setSelectedRating(rating); // Update selected rating when a star is clicked
   };
+
+  const handleSubmit= async ()=>{
+    if(selectedRating <=3 && textInput.trim()===" "){
+      alert("please select a rating");
+      return;
+    }
+
+    const reviewData ={
+      rating:selectedRating,
+      description: textInput.trim(),
+    };
+
+    try {
+      const response=await axios.post("http://localhost:4000/api/review-submit",reviewData);
+      alert('Review submitted successfully!');
+      console.log(response.data)
+    } catch (error) {
+      if(error.response){
+        alert(`Failed to submit review:${error.response.data.error || "server error"}`);
+      }
+      else if(error.request){
+        alert('Failed to submit review : NO response from server');
+      }else{
+        alert(`Failed to submit review : ${error.message}`);
+      }
+  };
+
+};
+
+    const handleCancel=()=>{
+      setTextInput('');
+      setSelectedRating(0);
+    }
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-slate-50">
@@ -30,7 +66,10 @@ const Rating = () => {
         </div>
 
         {/* Text Input */}
-        <TextInput />
+        <TextInput value={textInput} 
+        onChange={setTextInput}
+        onCancel={handleCancel}
+        onSubmit={handleSubmit}/>
       </div>
     </div>
   );

@@ -1,13 +1,12 @@
 import { useState } from "react";
 import TextInput from "./TextInput";
-import axios from "axios";
 
 const Rating = () => {
-  const [selectedRating, setSelectedRating] = useState(0); // No star selected initially
+  const [selectedRating, setSelectedRating] = useState(0); 
   const [textInput,setTextInput] =useState("");
 
   const handleRatingChange = (rating) => {
-    setSelectedRating(rating); // Update selected rating when a star is clicked
+    setSelectedRating(rating); 
   };
 
   const handleSubmit= async ()=>{
@@ -22,19 +21,24 @@ const Rating = () => {
     };
 
     try {
-      const response=await axios.post("http://localhost:4000/api/review-submit",reviewData);
-      alert('Review submitted successfully!');
-      console.log(response.data)
-    } catch (error) {
-      if(error.response){
-        alert(`Failed to submit review:${error.response.data.error || "server error"}`);
-      }
-      else if(error.request){
-        alert('Failed to submit review : NO response from server');
+      const response=await fetch('http://localhost:3000/api/review-submit',{
+        method:"POST",
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify(reviewData),
+      });
+      if(response.ok){
+        const result=await response.json();
+        alert('Review submitted successfully');
+        console.log('result is:',result);
       }else{
-        alert(`Failed to submit review : ${error.message}`);
+        const errordata=await response.json();
+        alert(`Failed to submit review: ${errordata.error || " Server error"}`);
       }
-  };
+    } catch (error) {
+      alert(`Failed to submitt ${error.message}`);
+    }
 
 };
 

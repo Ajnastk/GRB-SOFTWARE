@@ -13,10 +13,17 @@ createRoot(document.getElementById("root")).render(
   // <BrowserRouter>
   //   <Routes>
       
+
+      <Route path="/" element={<Signup />} />
+      <Route path="/login" element={<Login/>} />
+     {/* <Route path="/rating" element={<Rating />} /> */}
+    </Routes>
+
   //     <Route path="/" element={<Signup />} />
   //     <Route path="/login" element={<Login/>} />
   //     {/* <Route path="/rating" element={<Rating />} /> */}
   //   </Routes>
+
 
 
     

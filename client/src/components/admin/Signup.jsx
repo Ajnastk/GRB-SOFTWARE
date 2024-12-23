@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import QRCodeGenerator from "./QRCodeGenerator";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,8 @@ const Signup = () => {
     ConfirmPassword: "",
     googleReviewLink: "",
   });
+
+  const [adminId, setAdminId] = useState(null);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -41,6 +44,7 @@ const Signup = () => {
 
       if (response.ok) {
         alert("Signup successful!");
+        setAdminId(data.adminId); // Save adminId for QR code
       } else {
         alert(data.message || "Signup failed");
       }
@@ -193,7 +197,7 @@ const Signup = () => {
             Submit
           </button>
         </form>
-
+        
         {/* Shortcut to Sign-In Page */}
         <p className="text-sm text-center text-gray-600 mt-4">
           Already have an account?{" "}
@@ -201,7 +205,9 @@ const Signup = () => {
             Sign in
           </Link>
         </p>
+       
       </div>
+      {adminId && <QRCodeGenerator adminId={adminId} />}
     </div>
   );
 };

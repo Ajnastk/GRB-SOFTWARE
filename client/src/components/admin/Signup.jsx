@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { Link } from "react-router-dom";
 
 const Signup = () => {
@@ -15,11 +14,17 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -45,7 +50,6 @@ const Signup = () => {
     }
   };
 
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-blue-600 px-4 sm:px-6 lg:px-8">
       <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-sm sm:max-w-md">
@@ -56,18 +60,18 @@ const Signup = () => {
           {/* Username Input */}
           <div className="mb-4">
             <label
-              htmlFor="userName"
+              htmlFor="username"
               className="block text-sm font-medium text-gray-600 mb-2"
             >
               Username
             </label>
             <input
               type="text"
-              name="userName"
-              id="userName"
+              name="username" // Matches the key in formData
+              id="username"
               placeholder="Type your username"
-              value={formData.name}
-          onChange={handleChange}
+              value={formData.username} // Matches the key in formData
+              onChange={handleChange}
               required
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
@@ -76,18 +80,18 @@ const Signup = () => {
           {/* Email Input */}
           <div className="mb-4">
             <label
-              htmlFor="userEmail"
+              htmlFor="Email"
               className="block text-sm font-medium text-gray-600 mb-2"
             >
               Email
             </label>
             <input
               type="email"
-              name="userEmail"
-              id="userEmail"
+              name="Email" // Matches the key in formData
+              id="Email"
               placeholder="Type your email"
-              value={formData.Email}
-          onChange={handleChange}
+              value={formData.Email} // Matches the key in formData
+              onChange={handleChange}
               required
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
@@ -96,39 +100,39 @@ const Signup = () => {
           {/* Mobile Number Input */}
           <div className="mb-4">
             <label
-              htmlFor="userMobile"
+              htmlFor="MobileNumber"
               className="block text-sm font-medium text-gray-600 mb-2"
             >
               Mobile Number
             </label>
             <input
               type="tel"
-              name="userMobile"
-              id="userMobile"
+              name="MobileNumber" // Matches the key in formData
+              id="MobileNumber"
               placeholder="Type your mobile number"
               pattern="[0-9]{10}"
-              value={formData.MobileNumber}
-          onChange={handleChange}
+              value={formData.MobileNumber} // Matches the key in formData
+              onChange={handleChange}
               required
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
-          {/*googleReviewLink */}
 
-          <div>
+          {/* Google Review Link */}
+          <div className="mb-4">
             <label
-              htmlFor="urlReview"
+              htmlFor="googleReviewLink"
               className="block text-sm font-medium text-gray-600 mb-2"
             >
               Google Review Link:
             </label>
             <input
               type="url"
-              name="googleReviewLink"
-              value={formData.googleReviewLink}
+              name="googleReviewLink" // Matches the key in formData
+              id="googleReviewLink"
+              placeholder="Enter your Google review link"
+              value={formData.googleReviewLink} // Matches the key in formData
               onChange={handleChange}
-              
-          
               required
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
@@ -137,18 +141,18 @@ const Signup = () => {
           {/* Password Input */}
           <div className="mb-4 relative">
             <label
-              htmlFor="userPassword"
+              htmlFor="Password"
               className="block text-sm font-medium text-gray-600 mb-2"
             >
               Password
             </label>
             <input
               type={showPassword ? "text" : "password"}
-              name="userPassword"
-              id="userPassword"
+              name="Password" // Matches the key in formData
+              id="Password"
               placeholder="Type your password"
-              value={formData.Password}
-          onChange={handleChange}
+              value={formData.Password} // Matches the key in formData
+              onChange={handleChange}
               required
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
@@ -164,28 +168,21 @@ const Signup = () => {
           {/* Confirm Password Input */}
           <div className="mb-6 relative">
             <label
-              htmlFor="userConfirmPassword"
+              htmlFor="ConfirmPassword"
               className="block text-sm font-medium text-gray-600 mb-2"
             >
               Confirm Password
             </label>
             <input
               type={showPassword ? "text" : "password"}
-              name="userConfirmPassword"
-              id="userConfirmPassword"
+              name="ConfirmPassword" // Matches the key in formData
+              id="ConfirmPassword"
               placeholder="Confirm your password"
-              value={formData.Password}
-          onChange={handleChange}
+              value={formData.ConfirmPassword} // Matches the key in formData
+              onChange={handleChange}
               required
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="absolute inset-y-0 right-3 flex items-center text-gray-600 hover:text-blue-500 mt-5"
-            >
-              {showPassword ? "Hide" : "Show"}
-            </button>
           </div>
 
           {/* Submit Button */}

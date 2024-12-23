@@ -8,7 +8,7 @@ import Login from './components/admin/login.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Login />
+    <Signup />
   </StrictMode>,
 )
 

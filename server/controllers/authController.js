@@ -14,9 +14,9 @@ const Signup = async (req, res) => {
       mobile,
       password: hashPassword,
     });
-    await NewAdmin.save();
+     const getId =await NewAdmin.save();
 
-    res.status(201).json({ message: "Admin successfully created" });
+    res.status(201).json({ message: "Admin successfully created",id:getId._id });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
     console.error(error.message);

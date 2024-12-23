@@ -1,4 +1,4 @@
-const TextInput = () => {
+const TextInput = ({value,onChange,onCancel,onSubmit}) => {
     return (
       <div className="relative w-full max-w-lg mt-10 mx-auto px-4 sm:px-0">
         {/* Input Field */}
@@ -7,6 +7,8 @@ const TextInput = () => {
           type="text"
           placeholder=""
           className="peer input input-bordered w-full h-40 text-lg bg-slate-50 border-blue-500 text-black placeholder-transparent focus:ring-blue-600"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
         />
         
         {/* Floating Label */}
@@ -19,24 +21,18 @@ const TextInput = () => {
         
         {/* Buttons */}
         <div className="mt-6 flex justify-end flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
-          <button
+
+        <button
             className="bg-gray-500 text-white py-2 px-6 rounded-md hover:bg-gray-600 w-full sm:w-auto"
-            onClick={() => {
-              // Reset input field
-              document.getElementById('text-input').value = '';
-            }}
+            onClick={onCancel}
           >
             Cancel
           </button>
-          
-          <button
+        <button
             className="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 w-full sm:w-auto"
-            onClick={() => {
-              // Handle post action here
-              alert('Post button clicked!');
-            }}
+            onClick={onSubmit}
           >
-            Post
+           submit
           </button>
         </div>
       </div>

@@ -1,26 +1,30 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './styles/index.css'
-import Rating from './components/user/Rating.jsx'
-// import Signup from './components/admin/Signup.jsx'
-// import Login from './components/admin/login.jsx'
+
+import { createRoot } from "react-dom/client";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./styles/index.css";
+import Signup from "./components/admin/Signup.jsx";
+import Login from "./components/admin/Login.jsx";
+import Rating from "./components/user/Rating.jsx";
 
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <Rating />
-  </StrictMode>,
-)
+createRoot(document.getElementById("root")).render(
+  <Rating />
+  // <BrowserRouter>
+  //   <Routes>
+      
+  //     <Route path="/" element={<Signup />} />
+  //     <Route path="/login" element={<Login/>} />
+  //     {/* <Route path="/rating" element={<Rating />} /> */}
+  //   </Routes>
 
-
+    
+  // </BrowserRouter>
+);
 
 // import ReactDOM from "react-dom/client";
 // import { createBrowserRouter, RouterProvider} from "react-router-dom";
 // import Rating from './components/user/Rating.jsx'; // Rating component
 // import AdminPage from './components/admin/AdminPage.jsx'; // Admin page component
-    
-
-
 
 // const appRouter = createBrowserRouter([
 //   {

@@ -1,7 +1,8 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+// const { default: Rating } = require('../../client/src/components/user/Rating');
 
 const reviewSchema = new mongoose.Schema({
-    stars:{
+    rating:{
         type:Number,
         required:true,
         min:1,
@@ -11,8 +12,9 @@ const reviewSchema = new mongoose.Schema({
         type:String,
         // required:function(){
         //     return this.star<=3;
-        // }
-        required:true
+        // },
+        // required:true,
+        trim:true
     },
     createdAt:{
         type:Date,

@@ -2,11 +2,51 @@ import { useState } from "react";
 import TextInput from "./TextInput";
 
 const Rating = () => {
-  const [selectedRating, setSelectedRating] = useState(0); // No star selected initially
+  const [selectedRating, setSelectedRating] = useState(0); 
+  const [textInput,setTextInput] =useState("");
 
   const handleRatingChange = (rating) => {
-    setSelectedRating(rating); // Update selected rating when a star is clicked
+    setSelectedRating(rating); 
   };
+
+  const handleSubmit= async ()=>{
+    if(selectedRating <=3 && textInput.trim()===" "){
+      alert("please select a rating");
+      return;
+    }
+
+    const reviewData ={
+      rating:selectedRating,
+      description: textInput.trim(),
+    };
+
+    try {
+      const response=await fetch('http://localhost:3000/api/review-submit',{
+        method:"POST",
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify(reviewData),
+      });
+      if(response.ok){
+        const result=await response.json();
+        alert('Review submitted successfully');
+        console.log('result is:',result);
+      }else{
+        const errordata=await response.json();
+        alert(`Failed to submit review: ${errordata.error || " Server error"}`);
+      }
+    } catch (error) {
+      alert(`Failed to submitt ${error.message}`);
+    }
+
+};
+
+    const handleCancel=()=>{
+      setTextInput('');
+      setSelectedRating(0);
+    }
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-slate-50">
@@ -30,7 +70,10 @@ const Rating = () => {
         </div>
 
         {/* Text Input */}
-        <TextInput />
+        <TextInput value={textInput} 
+        onChange={setTextInput}
+        onCancel={handleCancel}
+        onSubmit={handleSubmit}/>
       </div>
     </div>
   );

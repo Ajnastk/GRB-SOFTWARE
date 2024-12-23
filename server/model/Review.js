@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 
 const reviewSchema = new mongoose.Schema({
-    shopId: req.params.Id,
     stars:{
         type:Number,
         required:true,

@@ -8,7 +8,7 @@ const Signup = () => {
     MobileNumber: "",
     Password: "",
     ConfirmPassword: "",
-    googleReviewLink: "",
+    googlelink: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -29,7 +29,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/admin/signup", {
+      const response = await fetch("http://localhost:3000/admin-signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -128,10 +128,10 @@ const Signup = () => {
             </label>
             <input
               type="url"
-              name="googleReviewLink" // Matches the key in formData
-              id="googleReviewLink"
+              name="googlelink" // Matches the key in formData
+              id="googlelink"
               placeholder="Enter your Google review link"
-              value={formData.googleReviewLink} // Matches the key in formData
+              value={formData.googlelink} // Matches the key in formData
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"

@@ -2,15 +2,18 @@ const ReviewModel = require ('../model/Review')
 
 const forDescription = async(req,res)=>{
     try{
-    const {description,stars} = req.body;
+    const {rating,description} = req.body;
 
-    if (stars <= 3 && (!description || description.trim() === "")) {
+    if (rating <= 3 && (!description || description.trim() === "")) {
+        console.error("Validation failed:description is required for rating");
         return res.status(400).json({
             error: "Cannot submit a review without a description for ratings"
         });
     }
+
+    console.log('Recieved data',req.body);
     
-    const newReview = new ReviewModel({description:description?.trim(),stars});
+    const newReview = new ReviewModel({description:description?.trim(),rating:rating});
 
     await newReview.save();
 

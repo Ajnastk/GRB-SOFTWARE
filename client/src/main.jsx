@@ -7,6 +7,7 @@ import Login from "./components/admin/Login.jsx";
 import Rating from "./components/user/Rating.jsx";
 
 
+
 createRoot(document.getElementById("root")).render(
   <Rating />
   // <BrowserRouter>
@@ -16,6 +17,7 @@ createRoot(document.getElementById("root")).render(
   //     <Route path="/login" element={<Login/>} />
   //     {/* <Route path="/rating" element={<Rating />} /> */}
   //   </Routes>
+
 
     
   // </BrowserRouter>

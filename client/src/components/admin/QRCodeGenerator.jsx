@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'; // Import PropTypes for type validation
-import QRCode from "qrcode.react"; // Import the QRCode component
+import {QRCodeCanvas} from "qrcode.react"; // Import the QRCode component
 
 const QRCodeGenerator = ({ adminId }) => {
   if (!adminId) {
@@ -11,7 +11,7 @@ const QRCodeGenerator = ({ adminId }) => {
   return (
     <div className="qr-code-container">
       <h2>Scan this QR Code</h2>
-      <QRCode value={url} size={256} />
+      <QRCodeCanvas value={url} size={256} />
     </div>
   );
 };

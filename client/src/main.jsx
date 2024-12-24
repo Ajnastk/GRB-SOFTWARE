@@ -4,31 +4,23 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./styles/index.css";
 import Signup from "./components/admin/Signup.jsx";
 import Login from "./components/admin/Login.jsx";
-import Rating from "./components/user/Rating.jsx";
+// import Rating from "./components/user/Rating.jsx";
 
 
 
 createRoot(document.getElementById("root")).render(
-  <Rating />
-  // <BrowserRouter>
-  //   <Routes>
+  // <Rating />
+  <BrowserRouter>
+    <Routes>
       
 
       <Route path="/" element={<Signup />} />
       <Route path="/login" element={<Login/>} />
-     {/* <Route path="/rating" element={<Rating />} /> */}
+     {/* <Route path="/rating" element={<Rating />} />  */}
     </Routes>
-
-  //     <Route path="/" element={<Signup />} />
-  //     <Route path="/login" element={<Login/>} />
-  //     {/* <Route path="/rating" element={<Rating />} /> */}
-  //   </Routes>
-
-
-
     
-  // </BrowserRouter>
-);
+  </BrowserRouter>
+)
 
 // import ReactDOM from "react-dom/client";
 // import { createBrowserRouter, RouterProvider} from "react-router-dom";

@@ -1,11 +1,14 @@
 const Admin = require("../model/AdminSchema");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const QRCode = require("qrcode");
+const fs = require("fs");
+const path = require("path");
 
 const Signup = async (req, res) => {
   try {
-    console.log("Request body:", req.body);  // Log the received request
-    const { name, email, mobile, googlelink,password,confirmPassword} = req.body;
+    //console.log("Request body:", req.body);  // Log the received request
+    const { name, email, mobile, googlelink,password,confirmPassword } = req.body;
 
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match" });
@@ -25,11 +28,31 @@ const Signup = async (req, res) => {
       password: hashPassword,
       confirmPassword: confirmPassword?.trim(),
       googlelink: googlelink?.trim(),
+    
 
     });
+  
 
     console.log('body given codes',req.body);
+     // Save admin to the database
      const getId =await NewAdmin.save();
+
+     // Ensure the 'qr-codes' directory exists
+     const qrCodesDir = path.join(__dirname, "../qr-codes");
+     if (!fs.existsSync(qrCodesDir)) {
+       fs.mkdirSync(qrCodesDir, { recursive: true }); // Create the directory if it doesn't exist
+     }
+ 
+     // Generate QR Code using the MongoDB `_id`
+     const qrCodePath = path.join(qrCodesDir, `${getId.name}.png`);
+     const qrCodeData = `http://localhost:5173/rating/${getId._id}`;
+     await QRCode.toFile(qrCodePath, qrCodeData);
+ 
+     // Update the admin document with the QR code path
+     getId.qrCodePath = qrCodePath;
+     await getId.save();
+ 
+
 
     res.status(201).json({ message: "Admin successfully created",id:getId._id });
   } catch (error) {
@@ -65,3 +88,7 @@ const Login = async (req, res) => {
 };
 
 module.exports ={Signup,Login}
+
+
+
+

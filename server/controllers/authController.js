@@ -14,6 +14,7 @@ const Signup = async (req, res) => {
       mobile,
       password: hashPassword,
       googlelink: googlelink?.trim(),
+
     });
      const getId =await NewAdmin.save();
 

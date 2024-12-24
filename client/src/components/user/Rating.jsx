@@ -30,8 +30,7 @@ const Rating = () => {
       });
       if(response.ok){
         const result=await response.json();
-        alert('Review submitted successfully');
-        console.log('result is:',result);
+        window.location.href="https://google.com/review-link";
       }else{
         const errordata=await response.json();
         alert(`Failed to submit review: ${errordata.error || " Server error"}`);

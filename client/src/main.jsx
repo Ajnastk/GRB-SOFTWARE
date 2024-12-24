@@ -1,4 +1,5 @@
 
+
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./styles/index.css";
@@ -9,7 +10,11 @@ import Login from "./components/admin/Login.jsx";
 
 
 createRoot(document.getElementById("root")).render(
+<<<<<<< HEAD
   // <Rating />
+=======
+ //<Rating />
+>>>>>>> 7bf1d130b1e6b06d32f28c18eda15ab870bd0e23
   <BrowserRouter>
     <Routes>
       
@@ -18,9 +23,18 @@ createRoot(document.getElementById("root")).render(
       <Route path="/login" element={<Login/>} />
      {/* <Route path="/rating" element={<Rating />} />  */}
     </Routes>
+<<<<<<< HEAD
     
   </BrowserRouter>
 )
+=======
+
+
+
+    
+   </BrowserRouter>
+);
+>>>>>>> 7bf1d130b1e6b06d32f28c18eda15ab870bd0e23
 
 // import ReactDOM from "react-dom/client";
 // import { createBrowserRouter, RouterProvider} from "react-router-dom";

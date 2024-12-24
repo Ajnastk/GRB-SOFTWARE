@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 
 const Signup = async (req, res) => {
   try {
-    const { name, email, mobile, password } = req.body;
+    const { name, email, mobile, password,googlelink } = req.body;
 
     const hashPassword = await bcrypt.hash(password, 10);
 
@@ -12,12 +12,13 @@ const Signup = async (req, res) => {
       name,
       email,
       mobile,
-      password: hashPassword,5
-      
-    });
-    await NewAdmin.save();
+      password: hashPassword,
+      googlelink: googlelink?.trim(),
 
-    res.status(201).json({ message: "Admin successfully created" });
+    });
+     const getId =await NewAdmin.save();
+
+    res.status(201).json({ message: "Admin successfully created",id:getId._id });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
     console.error(error.message);

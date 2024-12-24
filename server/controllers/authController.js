@@ -4,7 +4,17 @@ const bcrypt = require("bcryptjs");
 
 const Signup = async (req, res) => {
   try {
-    const { name, email, mobile, password } = req.body;
+    console.log("Request body:", req.body);  // Log the received request
+    const { name, email, mobile, googlelink,password,confirmPassword} = req.body;
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    const existingUser = await Admin.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
 
     const hashPassword = await bcrypt.hash(password, 10);
 
@@ -13,10 +23,14 @@ const Signup = async (req, res) => {
       email,
       mobile,
       password: hashPassword,
+      confirmPassword: confirmPassword?.trim(),
+      googlelink: googlelink?.trim(),
     });
-    await NewAdmin.save();
 
-    res.status(201).json({ message: "Admin successfully created" });
+    console.log('body given codes',req.body);
+     const getId =await NewAdmin.save();
+
+    res.status(201).json({ message: "Admin successfully created",id:getId._id });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
     console.error(error.message);

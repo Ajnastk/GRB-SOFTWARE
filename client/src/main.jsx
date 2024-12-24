@@ -10,9 +10,9 @@ import Rating from "./components/user/Rating.jsx";
 
 
 createRoot(document.getElementById("root")).render(
-  <Rating />
-  // <BrowserRouter>
-  //   <Routes>
+ //<Rating />
+  <BrowserRouter>
+    <Routes>
       
 
       <Route path="/" element={<Signup />} />
@@ -20,15 +20,10 @@ createRoot(document.getElementById("root")).render(
      {/* <Route path="/rating" element={<Rating />} /> */}
     </Routes>
 
-  //     <Route path="/" element={<Signup />} />
-  //     <Route path="/login" element={<Login/>} />
-  //     {/* <Route path="/rating" element={<Rating />} /> */}
-  //   </Routes>
-
 
 
     
-  // </BrowserRouter>
+   </BrowserRouter>
 );
 
 // import ReactDOM from "react-dom/client";

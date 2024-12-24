@@ -6,6 +6,8 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.0"
+  },
+  "dependencies": {
+    "qrcode.react": "^4.2.0"
   }
 }
-

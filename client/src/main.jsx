@@ -10,7 +10,7 @@ import Rating from "./components/user/Rating.jsx";
 
 
 createRoot(document.getElementById("root")).render(
- //<Rating />
+//  <Rating />
   <BrowserRouter>
     <Routes>
       

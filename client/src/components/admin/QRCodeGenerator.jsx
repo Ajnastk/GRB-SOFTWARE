@@ -1,3 +1,4 @@
+
 import PropTypes from 'prop-types'; // Import PropTypes for type validation
 import {QRCodeCanvas} from "qrcode.react"; // Import the QRCode component
 

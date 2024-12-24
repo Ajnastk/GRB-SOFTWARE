@@ -5,18 +5,34 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./styles/index.css";
 import Signup from "./components/admin/Signup.jsx";
 import Login from "./components/admin/Login.jsx";
+<<<<<<< HEAD
  import Rating from "./components/user/Rating.jsx";
  import ReviewList from "./components/admin/ReviewList.jsx";
+=======
+import Rating from "./components/user/Rating.jsx";
+// import Rating from "./components/user/Rating.jsx";
+>>>>>>> main
 
 
 
 createRoot(document.getElementById("root")).render(
 
+<<<<<<< HEAD
   <BrowserRouter>
     <Routes>
       
       <Route path="/review-list" element={ <ReviewList />}/>
       <Route path="/rating" element={<Rating />} />
+=======
+
+
+
+  <BrowserRouter>
+    <Routes>
+    
+    <Route path="/rating/:adminId" element={<Rating />} />
+
+>>>>>>> main
       <Route path="/" element={<Signup />} />
       <Route path="/login" element={<Login/>} />
      {/* <Route path="/rating" element={<Rating />} />  */}

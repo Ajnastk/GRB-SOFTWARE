@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 
 const Signup = async (req, res) => {
   try {
-    console.log("Request body:", req.body);  // Log the received request
+    //console.log("Request body:", req.body);  // Log the received request
     const { name, email, mobile, googlelink,password,confirmPassword} = req.body;
 
     if (password !== confirmPassword) {

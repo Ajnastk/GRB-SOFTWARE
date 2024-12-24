@@ -12,7 +12,8 @@ const Signup = async (req, res) => {
       name,
       email,
       mobile,
-      password: hashPassword,
+      password: hashPassword,5
+      
     });
     await NewAdmin.save();
 

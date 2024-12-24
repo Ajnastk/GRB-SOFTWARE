@@ -4,11 +4,11 @@ import QRCodeGenerator from "./QRCodeGenerator";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    username: "",
-    Email: "",
-    MobileNumber: "",
-    Password: "",
-    ConfirmPassword: "",
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    confirmPassword: "",
     googlelink: "",
   });
 
@@ -30,21 +30,34 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    if (formData.password !== formData.confirmPassword) {
+      alert('Password does not match');
+      return;
+    }
+  
     try {
-      const response = await fetch("http://localhost:3000/admin-signup", {
+      const response = await fetch("http://localhost:3000/api/admin-signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.mobile,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+          googlelink: formData.googlelink,
+        }),
       });
-
+  
       const data = await response.json();
-
-      if (response.ok) {
+      console.log('Server response:', data); // Log the response to check error details
+  
+      if (data.message === "Admin successfully created") {
         alert("Signup successful!");
-        setAdminId(data.adminId); // Save adminId for QR code
+        setAdminId(data.id); // Save adminId for QR code
       } else {
         alert(data.message || "Signup failed");
       }
@@ -71,10 +84,10 @@ const Signup = () => {
             </label>
             <input
               type="text"
-              name="username" // Matches the key in formData
-              id="username"
+              name="name" // Matches the key in formData
+              id="name"
               placeholder="Type your username"
-              value={formData.username} // Matches the key in formData
+              value={formData.name} // Matches the key in formData
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -91,10 +104,10 @@ const Signup = () => {
             </label>
             <input
               type="email"
-              name="Email" // Matches the key in formData
+              name="email" // Matches the key in formData
               id="Email"
               placeholder="Type your email"
-              value={formData.Email} // Matches the key in formData
+              value={formData.email} // Matches the key in formData
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -111,11 +124,11 @@ const Signup = () => {
             </label>
             <input
               type="tel"
-              name="MobileNumber" // Matches the key in formData
+              name="mobile" // Matches the key in formData
               id="MobileNumber"
               placeholder="Type your mobile number"
               pattern="[0-9]{10}"
-              value={formData.MobileNumber} // Matches the key in formData
+              value={formData.mobile} // Matches the key in formData
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -152,10 +165,10 @@ const Signup = () => {
             </label>
             <input
               type={showPassword ? "text" : "password"}
-              name="Password" // Matches the key in formData
+              name="password" // Matches the key in formData
               id="Password"
               placeholder="Type your password"
-              value={formData.Password} // Matches the key in formData
+              value={formData.password} // Matches the key in formData
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -179,10 +192,10 @@ const Signup = () => {
             </label>
             <input
               type={showPassword ? "text" : "password"}
-              name="ConfirmPassword" // Matches the key in formData
+              name="confirmPassword" // Matches the key in formData
               id="ConfirmPassword"
               placeholder="Confirm your password"
-              value={formData.ConfirmPassword} // Matches the key in formData
+              value={formData.confirmPassword} // Matches the key in formData
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"

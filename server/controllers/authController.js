@@ -25,6 +25,7 @@ const Signup = async (req, res) => {
       password: hashPassword,
       confirmPassword: confirmPassword?.trim(),
       googlelink: googlelink?.trim(),
+
     });
 
     console.log('body given codes',req.body);

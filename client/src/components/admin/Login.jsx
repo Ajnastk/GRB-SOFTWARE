@@ -35,7 +35,7 @@ function Login() {
                             Submit
                         </button>
                         {/* Uncomment the link below to use the Register page */}
-                        <Link to="/signup" className="text-indigo-600 hover:text-indigo-700">Register</Link>
+                        <Link to="/" className="text-indigo-600 hover:text-indigo-700">Register</Link>
                     </div>
                 </form>
             </main>

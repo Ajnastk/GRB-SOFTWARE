@@ -19,7 +19,7 @@ const AdminSchema=new mongoose.Schema({
         type: String, // Use String type
         validate: {
           validator: function (v) {
-            return /^(https?:\/\/)?(www\.)?google\.[a-z]+\/.+$/.test(v); // Validates if it's a Google URL
+            return /^(https?:\/\/)?((www\.)?google\.[a-z]+|g\.page)(\/.*)?$/.test(v); // Validates if it's a Google URL
           },
           message: 'Please enter a valid Google link',
         }

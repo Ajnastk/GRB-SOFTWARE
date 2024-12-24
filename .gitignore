@@ -17,5 +17,6 @@ client/build/
 server/build/
 
 # Ignore any other directories or files specific to your project
+/node_modules
 
 

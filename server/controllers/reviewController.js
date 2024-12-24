@@ -10,8 +10,6 @@ const forDescription = async(req,res)=>{
             error: "Cannot submit a review without a description for ratings"
         });
     }
-
-    console.log('Recieved data',req.body);
     
     const newReview = new ReviewModel({description:description?.trim(),rating:rating});
 

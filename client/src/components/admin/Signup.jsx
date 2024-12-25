@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate} from "react-router-dom";
 
 
 const Signup = () => {
@@ -15,6 +15,8 @@ const Signup = () => {
 
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate= useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,7 +59,7 @@ const Signup = () => {
   
       if (data.message === "Admin successfully created") {
   alert("Signup successful!");
- 
+   navigate('/login')
 } else {
   alert(data.message || "Signup failed");
 }
@@ -110,6 +112,7 @@ const Signup = () => {
               value={formData.email} // Matches the key in formData
               onChange={handleChange}
               required
+              autoComplete="email" // Added autocomplete attribute
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
@@ -172,6 +175,7 @@ const Signup = () => {
               value={formData.password} // Matches the key in formData
               onChange={handleChange}
               required
+              autoComplete="new-password" // Added autocomplete attribute
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <button
@@ -199,6 +203,7 @@ const Signup = () => {
               value={formData.confirmPassword} // Matches the key in formData
               onChange={handleChange}
               required
+              autoComplete="new-password" // Added autocomplete attribute
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>

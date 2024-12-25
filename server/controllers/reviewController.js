@@ -48,4 +48,18 @@ const forDescription = async (req, res) => {
   }
 };
 
-module.exports = { forDescription };
+
+
+const getReviews = async (req, res) => {
+  try {
+    const reviews = await ReviewModel.find(); // Fetch all reviews from the database
+    res.status(200).json(reviews); // Return the reviews as JSON
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    res.status(500).json({ error: "Failed to fetch reviews." });
+  }
+};
+
+
+
+module.exports = { forDescription , getReviews };

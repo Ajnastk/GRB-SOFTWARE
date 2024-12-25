@@ -10,8 +10,9 @@ const Rating = () => {
   };
 
   const handleSubmit = async () => {
-    if (selectedRating <= 3 && textInput.trim() === " ") {
-      alert("please select a rating");
+    // Validate inputs
+    if (selectedRating <= 3 && (!textInput || textInput.trim() === "")) {
+      alert("Please provide a description for ratings 3 or below.");
       return;
     }
 
@@ -28,15 +29,23 @@ const Rating = () => {
         },
         body: JSON.stringify(reviewData),
       });
+
       if (response.ok) {
         const result = await response.json();
-        window.location.href = "https://google.com/review-link";
+
+        if (result.redirectUrl) {
+          // Redirect for ratings 4 and above
+          window.location.href = result.redirectUrl;
+        } else {
+          alert("Review submitted successfully!");
+          handleCancel(); // Reset form after successful submission
+        }
       } else {
-        const errordata = await response.json();
-        alert(`Failed to submit review: ${errordata.error || " Server error"}`);
+        const errorData = await response.json();
+        alert(`Failed to submit review: ${errorData.error || "Server error"}`);
       }
     } catch (error) {
-      alert(`Failed to submitt ${error.message}`);
+      alert(`Failed to submit review: ${error.message}`);
     }
   };
 
@@ -69,15 +78,15 @@ const Rating = () => {
         {/* Text Input */}
         <TextInput
           value={textInput}
-          onChange={setTextInput}
+          onChange={(value) => setTextInput(value)}
           onCancel={handleCancel}
           onSubmit={handleSubmit}
         />
+
+     
       </div>
     </div>
   );
 };
 
 export default Rating;
-
-

@@ -1,9 +1,12 @@
 import { useState } from "react";
 import TextInput from "./TextInput";
+import { useNavigate } from "react-router-dom";
 
 const Rating = () => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [textInput, setTextInput] = useState("");
+
+  const navigate = useNavigate();
 
   const handleRatingChange = (rating) => {
     setSelectedRating(rating);
@@ -28,12 +31,16 @@ const Rating = () => {
         },
         body: JSON.stringify(reviewData),
       });
+      const result = await response.json();
       if (response.ok) {
-        const result = await response.json();
-        window.location.href = "https://google.com/review-link";
+        if (result.redirect && result.url) {
+          alert(result.message);
+          navigate(result.url);
+        } else {
+          alert(result.message);
+        }
       } else {
-        const errordata = await response.json();
-        alert(`Failed to submit review: ${errordata.error || " Server error"}`);
+        alert(`Failed to submit review: ${result.error || " Server error"}`);
       }
     } catch (error) {
       alert(`Failed to submitt ${error.message}`);
@@ -79,5 +86,3 @@ const Rating = () => {
 };
 
 export default Rating;
-
-

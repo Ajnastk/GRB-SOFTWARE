@@ -1,4 +1,5 @@
 const ReviewModel = require ('../model/Review')
+const Admin = require('../model/AdminSchema');
 
 const forDescription = async(req,res)=>{
     try{
@@ -11,16 +12,27 @@ const forDescription = async(req,res)=>{
         });
     }
     
-    const newReview = new ReviewModel({description:description?.trim(),rating:rating});
+    const admin = await Admin.findOne();
+    console.log('Admin document',admin);
+    if(!admin || !admin.googlelink ){
+        console.log('Google link not found in admin setting');
+        return res.status(500).json({error:"Google link not configured by admin"});
+    }
 
+    const { googlelink } =admin;
+
+    if(rating >=4){
+        console.log('Good review recieved');
+        return res.status(200).json({message:'Good review submitted',redirect:true,url:googlelink})
+   
+    }
+    const newReview = new ReviewModel({description:description?.trim(),rating:rating});
     await newReview.save();
+    
 
     return res.status(200).json("Review submitted");
     
 } catch(error){
-    // if (error.name === 'ValidationError') {
-    //     return res.status(400).json({ error: error.message });
-    // }
     console.error("Error submiting",error);
     return res.status(500).json({ error: "An error occurred while submitting the review." });
 }

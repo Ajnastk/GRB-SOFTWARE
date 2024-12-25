@@ -1,20 +1,20 @@
 import { useState } from "react";
 import TextInput from "./TextInput";
-import { useNavigate } from "react-router-dom";
 
 const Rating = () => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [textInput, setTextInput] = useState("");
 
-  const navigate = useNavigate();
+  
 
   const handleRatingChange = (rating) => {
     setSelectedRating(rating);
   };
 
   const handleSubmit = async () => {
-    if (selectedRating <= 3 && textInput.trim() === " ") {
-      alert("please select a rating");
+    // Validate inputs
+    if (selectedRating <= 3 && (!textInput || textInput.trim() === "")) {
+      alert("Please provide a description for ratings 3 or below.");
       return;
     }
 
@@ -31,19 +31,24 @@ const Rating = () => {
         },
         body: JSON.stringify(reviewData),
       });
-      const result = await response.json();
+
+
       if (response.ok) {
-        if (result.redirect && result.url) {
-          alert(result.message);
-          navigate(result.url);
+        const result = await response.json();
+
+        if (result.redirectUrl) {
+          // Redirect for ratings 4 and above
+          window.location.href = result.redirectUrl;
         } else {
-          alert(result.message);
+          alert("Review submitted successfully!");
+          handleCancel(); // Reset form after successful submission
         }
       } else {
-        alert(`Failed to submit review: ${result.error || " Server error"}`);
+        const errorData = await response.json();
+        alert(`Failed to submit review: ${errorData.error || "Server error"}`);
       }
     } catch (error) {
-      alert(`Failed to submitt ${error.message}`);
+      alert(`Failed to submit review: ${error.message}`);
     }
   };
 
@@ -76,13 +81,16 @@ const Rating = () => {
         {/* Text Input */}
         <TextInput
           value={textInput}
-          onChange={setTextInput}
+          onChange={(value) => setTextInput(value)}
           onCancel={handleCancel}
           onSubmit={handleSubmit}
         />
+
+     
       </div>
     </div>
   );
 };
 
 export default Rating;
+

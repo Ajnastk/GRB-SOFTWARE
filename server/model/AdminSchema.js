@@ -26,6 +26,8 @@ const AdminSchema = new mongoose.Schema(
         },
         message: "Please enter a valid Google link",
       },
+      required:true,
+      select:true
     },
     password: {
       type: String,

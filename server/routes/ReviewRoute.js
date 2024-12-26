@@ -1,9 +1,9 @@
 const express = require('express');
-const {forDescription} = require ('../controllers/reviewController') 
+const {forDescription , getReviews } = require ('../controllers/reviewController') 
+const { authMiddlware }=require('../middlewares/authmiddlware')
 const router = express.Router();
 
-router.post('/review-submit',forDescription);
-
-
+router.post('/review-submit',authMiddlware,forDescription);
+router.get('/review',authMiddlware,getReviews)
 
 module.exports = router;

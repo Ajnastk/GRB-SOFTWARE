@@ -5,8 +5,6 @@ const Rating = () => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [textInput, setTextInput] = useState("");
 
-  
-
   const handleRatingChange = (rating) => {
     setSelectedRating(rating);
   };
@@ -23,15 +21,22 @@ const Rating = () => {
       description: textInput.trim(),
     };
 
+    const token= localStorage.getItem('token');
+    console.log('Token from local storage',token)
+      if(!token){
+        alert('You must be logged in to submit a review');
+        return;
+      }
+
     try {
       const response = await fetch("http://localhost:3000/api/review-submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization:`Bearer ${token}`
         },
         body: JSON.stringify(reviewData),
       });
-
 
       if (response.ok) {
         const result = await response.json();
@@ -85,12 +90,9 @@ const Rating = () => {
           onCancel={handleCancel}
           onSubmit={handleSubmit}
         />
-
-     
       </div>
     </div>
   );
 };
 
 export default Rating;
-

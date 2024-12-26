@@ -7,13 +7,35 @@ const ReviewList = () => {
 
   useEffect(() => {
     const fetchReviews = async () => {
+
+      const token= localStorage.getItem('token');
+      if(!token){
+        setError('Authorization token is please login');
+        setLoading(false);
+        return;
+      }
       try {
-        const response = await fetch("http://localhost:3000/api/review-submit"); // Adjusted endpoint
+        const response = await fetch("http://localhost:3000/api/review",{
+          method:'GET',
+          headers:{
+            'Content-Type':'application/json',
+            Authorization: `Bearer ${token}`,
+          }
+        })
+        console.log('response status',response.status);
+        const rawResponse= await response.clone().text();
+        console.log('Raw response',rawResponse)
+
         if (!response.ok) {
           throw new Error("Failed to fetch reviews");
         }
         const data = await response.json();
-        setReviews(data);
+        console.log('Api response:',data);
+        if(Array.isArray(data)){
+          setReviews(data);
+        }else{
+          throw new Error('Invalid reviews data format');
+        }
       } catch (error) {
         setError(error.message);
       } finally {
@@ -46,19 +68,19 @@ const ReviewList = () => {
                   <h3 className="text-xl font-semibold">
                     {review.user || "Anonymous"} {/* Handle missing user */}
                   </h3>
-                  <div className="text-yellow-500">
-                    {Array.from({ length: Math.min(review.rating, 5) }).map(
+                  <div className="text-yellow-500 text-2xl">
+                    {Array.from({ length: Math.min(review.rating,5) }).map(
                       (_, index) => (
                         <span key={index}>⭐</span>
                       )
                     )}
                   </div>
                 </div>
-                <p>{review.comment || "No comment provided."}</p> {/* Handle missing comment */}
+                <p>{review.description}</p> {/* Handle missing comment */}
                 <p className="text-sm text-gray-500 mt-2">
                   Date:{" "}
-                  {review.date
-                    ? new Date(review.date).toLocaleDateString()
+                  {review.createdAt
+                    ? new Date(review.createdAt).toLocaleDateString()
                     : "Unknown"}
                 </p>
               </div>

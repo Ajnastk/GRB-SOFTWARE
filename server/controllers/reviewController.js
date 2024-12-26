@@ -50,8 +50,14 @@ const forDescription = async (req, res) => {
 
 
 
+
+
+
 const getReviews = async (req, res) => {
   try {
+
+    const {adminId} = req.params;
+
     const reviews = await ReviewModel.find(); // Fetch all reviews from the database
     res.status(200).json(reviews); // Return the reviews as JSON
   } catch (error) {
@@ -60,6 +66,5 @@ const getReviews = async (req, res) => {
   }
 };
 
+module.exports ={forDescription, getReviews}
 
-
-module.exports = { forDescription , getReviews };

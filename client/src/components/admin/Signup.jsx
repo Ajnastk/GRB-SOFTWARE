@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Link,useNavigate} from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -12,11 +11,9 @@ const Signup = () => {
     googlelink: "",
   });
 
-
-
   const [showPassword, setShowPassword] = useState(false);
 
-  const navigate= useNavigate();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,12 +29,12 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (formData.password !== formData.confirmPassword) {
-      alert('Password does not match');
+      alert("Password does not match");
       return;
     }
-  
+
     try {
       const response = await fetch("http://localhost:3000/api/admin-signup", {
         method: "POST",
@@ -53,16 +50,16 @@ const Signup = () => {
           googlelink: formData.googlelink,
         }),
       });
-  
+
       const data = await response.json();
-      console.log('Server response:', data); // Log the response to check error details
-  
+      console.log("Server response:", data); // Log the response to check error details
+
       if (data.message === "Admin successfully created") {
-  alert("Signup successful!");
-   navigate('/login')
-} else {
-  alert(data.message || "Signup failed");
-}
+        alert("Signup successful!");
+        navigate("/login");
+      } else {
+        alert(data.message || "Signup failed");
+      }
     } catch (error) {
       console.error("Error signing up:", error);
       alert("An error occurred during signup.");
@@ -157,7 +154,6 @@ const Signup = () => {
               className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
-          
 
           {/* Password Input */}
           <div className="mb-4 relative">
@@ -216,7 +212,7 @@ const Signup = () => {
             Submit
           </button>
         </form>
-        
+
         {/* Shortcut to Sign-In Page */}
         <p className="text-sm text-center text-gray-600 mt-4">
           Already have an account?{" "}
@@ -224,9 +220,7 @@ const Signup = () => {
             Sign in
           </Link>
         </p>
-       
       </div>
-    
     </div>
   );
 };

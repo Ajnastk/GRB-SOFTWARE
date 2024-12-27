@@ -21,11 +21,19 @@ const Rating = () => {
       description: textInput.trim(),
     };
 
+    const token= localStorage.getItem('token');
+    console.log('Token from local storage',token)
+      if(!token){
+        alert('You must be logged in to submit a review');
+        return;
+      }
+
     try {
       const response = await fetch("http://localhost:3000/api/review-submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization:`Bearer ${token}`
         },
         body: JSON.stringify(reviewData),
       });
@@ -82,8 +90,6 @@ const Rating = () => {
           onCancel={handleCancel}
           onSubmit={handleSubmit}
         />
-
-     
       </div>
     </div>
   );

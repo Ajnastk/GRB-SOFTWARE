@@ -4,6 +4,10 @@ client/node_modules/
 server/node_modules/
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 01adfdb71d2bcc4c373d8c5935453b13686fa1dd
 # Ignore log files
 *.log
 
@@ -18,5 +22,6 @@ client/build/
 server/build/
 
 # Ignore any other directories or files specific to your project
+/node_modules
 
 

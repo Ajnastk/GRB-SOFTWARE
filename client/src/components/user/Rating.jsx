@@ -2,51 +2,65 @@ import { useState } from "react";
 import TextInput from "./TextInput";
 
 const Rating = () => {
-  const [selectedRating, setSelectedRating] = useState(0); 
-  const [textInput,setTextInput] =useState("");
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [textInput, setTextInput] = useState("");
 
   const handleRatingChange = (rating) => {
-    setSelectedRating(rating); 
+    setSelectedRating(rating);
   };
 
-  const handleSubmit= async ()=>{
-    if(selectedRating <=3 && textInput.trim()===" "){
-      alert("please select a rating");
+  const handleSubmit = async () => {
+    // Validate inputs
+    if (selectedRating <= 3 && (!textInput || textInput.trim() === "")) {
+      alert("Please provide a description for ratings 3 or below.");
       return;
     }
 
-    const reviewData ={
-      rating:selectedRating,
+    const reviewData = {
+      rating: selectedRating,
       description: textInput.trim(),
     };
 
+    const token= localStorage.getItem('token');
+    console.log('Token from local storage',token)
+      if(!token){
+        alert('You must be logged in to submit a review');
+        return;
+      }
+
     try {
-      const response=await fetch('http://localhost:3000/api/review-submit',{
-        method:"POST",
-        headers:{
-          'Content-Type':'application/json'
+      const response = await fetch("http://localhost:3000/api/review-submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:`Bearer ${token}`
         },
         body: JSON.stringify(reviewData),
       });
-      if(response.ok){
-        const result=await response.json();
-        alert('Review submitted successfully');
-        console.log('result is:',result);
-      }else{
-        const errordata=await response.json();
-        alert(`Failed to submit review: ${errordata.error || " Server error"}`);
+
+      if (response.ok) {
+        const result = await response.json();
+
+        if (result.redirectUrl) {
+          // Redirect for ratings 4 and above
+          window.location.href = result.redirectUrl;
+        } else {
+          alert("Review submitted successfully!");
+          handleCancel(); // Reset form after successful submission
+        }
+      } else {
+        const errorData = await response.json();
+        alert(`Failed to submit review: ${errorData.error || "Server error"}`);
       }
     } catch (error) {
-      alert(`Failed to submitt ${error.message}`);
+      alert(`Failed to submit review: ${error.message}`);
     }
+  };
 
-};
-
-    const handleCancel=()=>{
-      setTextInput('');
-      setSelectedRating(0);
-    }
-
+  const handleCancel = () => {
+    setTextInput("");
+    setSelectedRating(0);
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-slate-50">
@@ -70,10 +84,12 @@ const Rating = () => {
         </div>
 
         {/* Text Input */}
-        <TextInput value={textInput} 
-        onChange={setTextInput}
-        onCancel={handleCancel}
-        onSubmit={handleSubmit}/>
+        <TextInput
+          value={textInput}
+          onChange={(value) => setTextInput(value)}
+          onCancel={handleCancel}
+          onSubmit={handleSubmit}
+        />
       </div>
     </div>
   );

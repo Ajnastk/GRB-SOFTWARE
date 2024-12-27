@@ -1,10 +1,11 @@
 const express = require('express');
-const {forDescription} = require ('../controllers/reviewController') 
-const {generateQrcode} = require ('../controllers/generateQrcode')
+
+const {forDescription , getReviews } = require ('../controllers/reviewController') 
+const { authMiddlware } =require('../middlewares/authmiddlware')
 const router = express.Router();
 
-router.post('/review-submit',forDescription);
-router.get('/generate-qrcode',generateQrcode);
+router.post('/review-submit',authMiddlware,forDescription);
+router.get('/review',authMiddlware,getReviews)
 
 
 module.exports = router;

@@ -57,6 +57,7 @@ const forDescription = async (req, res) => {
   }
 };
 
+
 const getReviews = async (req, res) => {
   try {
     const adminId = req.admin?.adminId;
@@ -66,6 +67,7 @@ const getReviews = async (req, res) => {
       return res.status(400).json({ error: "Invalid admin credention" });
     }
     const reviews = await ReviewModel.find({adminId}); // Fetch all reviews from the database
+
     res.status(200).json(reviews); // Return the reviews as JSON
   } catch (error) {
     console.error("Error fetching reviews:", error);
@@ -73,4 +75,6 @@ const getReviews = async (req, res) => {
   }
 };
 
+
 module.exports = { forDescription, getReviews };
+

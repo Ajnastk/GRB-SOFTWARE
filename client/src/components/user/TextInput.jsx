@@ -1,3 +1,4 @@
+
 const TextInput = ({value,onChange,onCancel,onSubmit}) => {
     return (
       <div className="relative w-full max-w-lg mt-10 mx-auto px-4 sm:px-0">
@@ -40,3 +41,6 @@ const TextInput = ({value,onChange,onCancel,onSubmit}) => {
   };
   
   export default TextInput;
+
+
+

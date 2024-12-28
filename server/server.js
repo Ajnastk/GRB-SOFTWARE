@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
     res.json({ message: 'Backend is running!' });
 });
 
+
 // Status route
 app.get('/status', (req, res) => {
     res.json({ message: 'Backend is running and ready to accept requests!' });

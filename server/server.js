@@ -16,6 +16,12 @@ app.use(express.json());
 app.use('/api', AuthRoute);
 app.use('/api', reviewRoutes);
 
+// Root route
+app.get('/', (req, res) => {
+    res.json({ message: 'Backend is running!' });
+});
+
+// Status route
 app.get('/status', (req, res) => {
     res.json({ message: 'Backend is running and ready to accept requests!' });
 });

@@ -9,4 +9,7 @@ export default defineConfig({
     port: 3001, // Set a specific port for Vite
     open: true, // Optional: Automatically open the browser
   },
+   build: {
+    outDir: 'build', // Specify the output directory for the build
+  },
 })

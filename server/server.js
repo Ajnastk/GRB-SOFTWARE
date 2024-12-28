@@ -33,9 +33,6 @@ app.use(errorHandler);
 
 
 
-
-
-
 mongoose.connect(MONGO_URL)
     .then(()=>{
         console.log(`Mongodb connection successfully`);

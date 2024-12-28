@@ -7,6 +7,5 @@ export default defineConfig({
   server: {
     port: 3001, // Set a specific port for Vite
     open: true, // Optional: Automatically open the browser
-
   },
 })

@@ -4,6 +4,7 @@ const dotenv=require('dotenv').config();
 const cors = require('cors');
 const AuthRoute=require('./routes/authRoutes');
 const reviewRoutes = require('./routes/ReviewRoute') 
+const { notFound, errorHandler } = require('./middlewares/errorhandler');
 
 const app=express();
 const PORT=process.env.PORT || 5000;
@@ -12,8 +13,12 @@ const MONGO_URL=process.env.MONGO_URI;
 app.use(cors());
 
 app.use(express.json());
-app.use('/api',AuthRoute);
-app.use('/api',reviewRoutes);
+app.use('/api', AuthRoute);
+app.use('/api', reviewRoutes);
+
+// Error Handling Middleware (should be last)
+app.use(notFound);
+app.use(errorHandler);
 
 
 mongoose.connect(MONGO_URL)

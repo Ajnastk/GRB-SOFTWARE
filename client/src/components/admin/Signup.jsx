@@ -38,7 +38,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await fetch(`${backendUrl}/api/admin-signup`, {
+      const response = await fetch(`${backendUrl}api/admin-signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

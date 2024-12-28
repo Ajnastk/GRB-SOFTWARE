@@ -16,7 +16,7 @@ const ReviewList = () => {
         return;
       }
       try {
-        const response = await fetch(`${backendUrl}/api/review`,{
+        const response = await fetch(`${backendUrl}api/review`,{
           method:'GET',
           headers:{
             'Content-Type':'application/json',

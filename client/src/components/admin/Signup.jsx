@@ -218,7 +218,7 @@ const Signup = () => {
         {/* Shortcut to Sign-In Page */}
         <p className="text-sm text-center text-gray-600 mt-4">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-500 hover:underline">
+          <Link to="/" className="text-blue-500 hover:underline">
             Sign in
           </Link>
         </p>

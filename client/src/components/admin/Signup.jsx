@@ -36,7 +36,9 @@ const Signup = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/admin-signup", {
+     const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
+
+      const response = await fetch(`${backendUrl}/api/admin-signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

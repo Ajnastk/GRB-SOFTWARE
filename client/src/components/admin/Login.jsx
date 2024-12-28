@@ -28,7 +28,7 @@ function Login() {
         console.log("form data being sent",formData)
 
         try {
-            const response = await fetch(`${backendUrl}api/admin-login`,{
+            const response = await fetch(`${backendUrl}/api/admin-login`,{
                 method:'POST',
                 headers:{
                     "Content-Type":"application/json"

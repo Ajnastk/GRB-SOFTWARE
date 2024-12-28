@@ -19,7 +19,7 @@ createRoot(document.getElementById("root")).render(
     <Routes>
     <Route path="/review-list" element={ <AdminPage/>}/>
     <Route path="/rating/:adminId" element={<Rating />} />
-
+  
 
       <Route path="/" element={<Signup />} />
       <Route path="/login" element={<Login/>} />

@@ -18,7 +18,7 @@ const ReviewList = () => {
 
         const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
         
-        const response = await fetch(`${backendUrl}/api/review`,{
+        const response = await fetch(`${backendUrl}api/review`,{
           method:'GET',
           headers:{
             'Content-Type':'application/json',

@@ -20,7 +20,7 @@ const Rating = () => {
       rating: selectedRating,
       description: textInput.trim(),
     };
-
+    const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
     const token= localStorage.getItem('token');
     console.log('Token from local storage',token)
       if(!token){
@@ -29,8 +29,7 @@ const Rating = () => {
       }
 
     try {
-      const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
-      const response = await fetch(`${backendUrl}api/review-submit`, {
+      const response = await fetch(`${backendUrl}/api/review-submit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -19,10 +19,10 @@ createRoot(document.getElementById("root")).render(
     <Routes>
     <Route path="/review-list" element={ <AdminPage/>}/>
     <Route path="/rating/:adminId" element={<Rating />} />
+  
 
-
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/" element={<Login/>} />
+      <Route path="/" element={<Signup />} />
+      <Route path="/login" element={<Login/>} />
      {/* <Route path="/rating" element={<Rating />} />  */}
     </Routes>
     

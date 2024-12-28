@@ -28,7 +28,7 @@ function Login() {
         console.log("form data being sent",formData)
 
         try {
-            const response = await fetch(`${backendUrl}api/admin-login`,{
+            const response = await fetch(`${backendUrl}/api/admin-login`,{
                 method:'POST',
                 headers:{
                     "Content-Type":"application/json"
@@ -93,7 +93,7 @@ function Login() {
                             Submit
                         </button>
                         {/* Uncomment the link below to use the Register page */}
-                        <Link to="/signup" className="text-indigo-600 hover:text-indigo-700">Register</Link>
+                        <Link to="/" className="text-indigo-600 hover:text-indigo-700">Register</Link>
                     </div>
                 </form>
             </main>

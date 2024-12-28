@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 function Login() {
@@ -20,11 +20,15 @@ function Login() {
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
+    
+        const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
+
+        console.log(backendUrl)
 
         console.log("form data being sent",formData)
 
         try {
-            const response = await fetch('http://localhost:3000/api/admin-login',{
+            const response = await fetch(`${backendUrl}/api/admin-login`,{
                 method:'POST',
                 headers:{
                     "Content-Type":"application/json"

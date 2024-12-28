@@ -16,7 +16,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vite-plugin-env-compatible": "^2.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
@@ -38,5 +39,6 @@
   "main": "eslint.config.js",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "proxy": "http://localhost:3000"
 }

@@ -9,7 +9,7 @@ server/node_modules/
 .DS_Store
 
 # Ignore environment variable files (.env)
-.env
+
 client/.env
 server/.env
 

@@ -29,7 +29,7 @@ const Rating = () => {
       }
 
     try {
-      const response = await fetch(`${backendUrl}/api/review-submit`, {
+      const response = await fetch(`${backendUrl}api/review-submit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

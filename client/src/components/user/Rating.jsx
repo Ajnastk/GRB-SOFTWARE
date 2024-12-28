@@ -30,7 +30,7 @@ const Rating = () => {
 
     try {
       const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
-      const response = await fetch(`${backendUrl}/api/review-submit`, {
+      const response = await fetch(`${backendUrl}api/review-submit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -42,10 +42,10 @@ const Signup = async (req, res) => {
      if (!fs.existsSync(qrCodesDir)) {
        fs.mkdirSync(qrCodesDir, { recursive: true }); // Create the directory if it doesn't exist
      }
- 
+     const frontendUrl = process.env.FRONTEND_URL;
      // Generate QR Code using the MongoDB `_id`
      const qrCodePath = path.join(qrCodesDir, `${getId.name}.png`);
-     const qrCodeData = `http://localhost:5173/rating/${getId._id}`;
+     const qrCodeData = `${frontendUrl}rating/${getId._id}`;
      await QRCode.toFile(qrCodePath, qrCodeData);
  
      // Update the admin document with the QR code path

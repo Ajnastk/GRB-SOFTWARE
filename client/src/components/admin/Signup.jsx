@@ -30,15 +30,15 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;    
+    
     if (formData.password !== formData.confirmPassword) {
       alert("Password does not match");
       return;
     }
 
     try {
-     const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
-
-      const response = await fetch(`${backendUrl}api/admin-signup`, {
+      const response = await fetch(`${backendUrl}/api/admin-signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -218,7 +218,7 @@ const Signup = () => {
         {/* Shortcut to Sign-In Page */}
         <p className="text-sm text-center text-gray-600 mt-4">
           Already have an account?{" "}
-          <Link to="/" className="text-blue-500 hover:underline">
+          <Link to="/login" className="text-blue-500 hover:underline">
             Sign in
           </Link>
         </p>

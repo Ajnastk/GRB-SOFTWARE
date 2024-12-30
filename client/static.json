@@ -1,6 +1,10 @@
 {
-    "clean_urls": false,
-    "routes": {
-      "/**": "index.html"
+  "root": "build/",
+  "cleanUrls": false,
+  "rewrites": [
+    {
+      "source": "/**",
+      "destination": "/index.html"
     }
-  }
+  ]
+}

@@ -21,14 +21,14 @@ function Login() {
     const handleSubmit = async (e)=>{
         e.preventDefault();
         
-        const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
+        const backendUrl = `${import.meta.env.REACT_APP_BACKEND_URL}/`;
 
         console.log(backendUrl)
 
         console.log("form data being sent",formData)
 
         try {
-            const response = await fetch(`${backendUrl}/api/admin-login`,{
+            const response = await fetch(`${backendUrl}api/admin-login`,{
                 method:'POST',
                 headers:{
                     "Content-Type":"application/json"

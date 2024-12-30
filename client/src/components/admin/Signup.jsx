@@ -30,7 +30,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;    
+    const backendUrl = `${import.meta.env.REACT_APP_BACKEND_URL}/`;    
     
     if (formData.password !== formData.confirmPassword) {
       alert("Password does not match");
@@ -38,7 +38,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await fetch(`${backendUrl}/api/admin-signup`, {
+      const response = await fetch(`${backendUrl}api/admin-signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,22 +1,23 @@
-# Ignore node_modules in client and server folders
-node_modules
+
+# Ignore node_modules in both client and server folders
 client/node_modules/
 server/node_modules/
 
 # Ignore log files
 *.log
 
-# Ignore OS-specific files
+# Ignore OS-specific files (macOS)
 .DS_Store
 
-# Ignore environment variables
-.env/
+# Ignore environment variable files (.env)
+
+client/.env
+server/.env
 
 # Ignore build directories (if any)
 client/build/
 server/build/
 
-# Ignore any other directories or files specific to your project
-/node_modules
 
-
+# Ignore any other node_modules folder
+node_modules/

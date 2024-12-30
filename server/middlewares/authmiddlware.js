@@ -5,7 +5,8 @@ const authMiddlware= async(req,res,next)=>{
 
     try {
         const authHeader=req.header('authorization');
-        console.log('authheader iis',authHeader);
+
+        console.log('authheaderis',authHeader);
         if(!authHeader){
             console.error("Authorization header is missing");
             return res.status(401).json({error:'Authorization token is required'});

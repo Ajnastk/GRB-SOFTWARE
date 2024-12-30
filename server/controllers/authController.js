@@ -4,8 +4,15 @@ const bcrypt = require("bcryptjs");
 const QRCode = require("qrcode");
 const fs = require("fs");
 const path = require("path");
+const cloudinary = require("../config/cloudinaryConfig"); 
+
+console.log("Cloudinary Configuration Test:");
+console.log(cloudinary.config());
+
 
 const Signup = async (req, res) => {
+
+  const frontend = process.env.FRONTEND_URL
   try {
     //console.log("Request body:", req.body);  // Log the received request
     const { name, email, mobile, googlelink,password,confirmPassword } = req.body;
@@ -38,23 +45,42 @@ const Signup = async (req, res) => {
      const getId =await NewAdmin.save();
 
      // Ensure the 'qr-codes' directory exists
-     const qrCodesDir = path.join(__dirname, "../qr-codes");
-     if (!fs.existsSync(qrCodesDir)) {
-       fs.mkdirSync(qrCodesDir, { recursive: true }); // Create the directory if it doesn't exist
-     }
-     const frontendUrl = process.env.FRONTEND_URL;
+    //  const qrCodesDir = path.join(__dirname, "../qr-codes");
+    //  if (!fs.existsSync(qrCodesDir)) {
+    //    fs.mkdirSync(qrCodesDir, { recursive: true }); // Create the directory if it doesn't exist
+    //  }
+ 
      // Generate QR Code using the MongoDB `_id`
-     const qrCodePath = path.join(qrCodesDir, `${getId.name}.png`);
-     const qrCodeData = `${frontendUrl}rating/${getId._id}`;
-     await QRCode.toFile(qrCodePath, qrCodeData);
+    //  const qrCodePath = path.join(qrCodesDir, `${getId.name}.png`);
+     const qrCodeData = `${frontend}/rating/${getId._id}`;
+     const qrCodeBuffer = await QRCode.toBuffer(qrCodeData);
+    //  await QRCode.toFile(qrCodePath, qrCodeData);
  
-     // Update the admin document with the QR code path
-     getId.qrCodePath = qrCodePath;
-     await getId.save();
+    //  // Update the admin document with the QR code path
+    //  getId.qrCodePath = qrCodePath;
+    //  await getId.save();
  
 
 
-    res.status(201).json({ message: "Admin successfully created",id:getId._id });
+    // res.status(201).json({ message: "Admin successfully created",id:getId._id });
+
+    cloudinary.uploader.upload_stream(
+      { resource_type: 'image', public_id: `qr_codes/${getId._id}` }, // Set a public ID for the image
+      async (error, result) => {
+        if (error) {
+          console.log('Error uploading QR code to Cloudinary:', error);
+          return res.status(500).json({ message: "Error uploading QR code" });
+        } else {
+          console.log('Cloudinary upload result:', result); // Log the result
+        }
+
+        // Once uploaded, store the Cloudinary URL in the admin document
+        getId.qrCodePath = result.secure_url;
+        await getId.save();
+
+        res.status(201).json({ message: "Admin successfully created", id: getId._id, qrCodeUrl: result.secure_url });
+      }
+    ).end(qrCodeBuffer); 
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
     console.error(error.message);

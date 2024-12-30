@@ -1,6 +1,3 @@
-
-
-
 import ReviewList from "./ReviewList";
 
 const AdminPage = () => {

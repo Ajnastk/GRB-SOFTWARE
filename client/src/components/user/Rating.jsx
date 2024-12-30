@@ -20,6 +20,7 @@ const Rating = () => {
       rating: selectedRating,
       description: textInput.trim(),
     };
+
     
     const backendUrl = import.meta.env.MODE === "production"
           ?import.meta.env.REACT_APP_BACKEND_URL

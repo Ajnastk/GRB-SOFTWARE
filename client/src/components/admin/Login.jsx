@@ -21,7 +21,9 @@ function Login() {
     const handleSubmit = async (e)=>{
         e.preventDefault();
         
-        const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
+        const backendUrl = import.meta.env.MODE === "production"
+        ?import.meta.env.REACT_APP_BACKEND_URL
+        :"http://localhost:3000/";
 
         console.log(backendUrl)
 

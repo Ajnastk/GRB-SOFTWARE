@@ -7,17 +7,22 @@ const ReviewList = () => {
 
   useEffect(() => {
     const fetchReviews = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("Authorization token is please login");
+
+
+      const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
+      const token= localStorage.getItem('token');
+      if(!token){
+        setError('Authorization token is please login');
         setLoading(false);
         return;
       }
       try {
-        const response = await fetch("http://localhost:3000/api/review", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
+
+
+        const response = await fetch(`${backendUrl}api/review`,{
+          method:'GET',
+          headers:{
+            'Content-Type':'application/json',
             Authorization: `Bearer ${token}`,
           },
         });

@@ -8,7 +8,7 @@ const ReviewList = () => {
   useEffect(() => {
     const fetchReviews = async () => {
 
-      const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
+      const backendUrl = `${import.meta.env.REACT_APP_BACKEND_URL}/`;
       const token= localStorage.getItem('token');
       if(!token){
         setError('Authorization token is please login');

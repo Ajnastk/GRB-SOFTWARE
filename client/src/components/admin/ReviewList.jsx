@@ -7,34 +7,33 @@ const ReviewList = () => {
 
   useEffect(() => {
     const fetchReviews = async () => {
-
-      const token= localStorage.getItem('token');
-      if(!token){
-        setError('Authorization token is please login');
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("Authorization token is please login");
         setLoading(false);
         return;
       }
       try {
-        const response = await fetch("http://localhost:3000/api/review",{
-          method:'GET',
-          headers:{
-            'Content-Type':'application/json',
+        const response = await fetch("http://localhost:3000/api/review", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-          }
-        })
-        console.log('response status',response.status);
-        const rawResponse= await response.clone().text();
-        console.log('Raw response',rawResponse)
+          },
+        });
+        console.log("response status", response.status);
+        const rawResponse = await response.clone().text();
+        console.log("Raw response", rawResponse);
 
         if (!response.ok) {
           throw new Error("Failed to fetch reviews");
         }
         const data = await response.json();
-        console.log('Api response:',data);
-        if(Array.isArray(data)){
+        console.log("Api response:", data);
+        if (Array.isArray(data)) {
           setReviews(data);
-        }else{
-          throw new Error('Invalid reviews data format');
+        } else {
+          throw new Error("Invalid reviews data format");
         }
       } catch (error) {
         setError(error.message);
@@ -69,7 +68,7 @@ const ReviewList = () => {
                     {review.user || "Anonymous"} {/* Handle missing user */}
                   </h3>
                   <div className="text-yellow-500 text-2xl">
-                    {Array.from({ length: Math.min(review.rating,5) }).map(
+                    {Array.from({ length: Math.min(review.rating, 5) }).map(
                       (_, index) => (
                         <span key={index}>⭐</span>
                       )

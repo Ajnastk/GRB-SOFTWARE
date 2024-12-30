@@ -9,9 +9,12 @@ const { notFound, errorHandler } = require('./middlewares/errorhandler');
 const app=express();
 const PORT=process.env.PORT || 5000;
 const MONGO_URL=process.env.MONGO_URI;
-const BACKEND_URL=process.env.BACKEND_URL || "http://localhost:3000"
+const FRONTEND_URL=process.env.FRONTEND_URL || "http://localhost:5173";
 
-app.use(cors());
+app.use(cors({
+    origin:FRONTEND_URL,
+    credentials:true,
+}));
 
 app.use(express.json());
 app.use('/api', AuthRoute);
@@ -37,7 +40,7 @@ mongoose.connect(MONGO_URL)
     .then(()=>{
         console.log(`Mongodb connection successfully`);
         app.listen(PORT,()=>{
-            console.log(`server running on ${BACKEND_URL}`);
+            console.log(`server running on http://localhost/${PORT}`);
         });
     })
     .catch((err)=>{

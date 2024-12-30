@@ -20,7 +20,11 @@ const Rating = () => {
       rating: selectedRating,
       description: textInput.trim(),
     };
-    const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
+    
+    const backendUrl = import.meta.env.MODE === "production"
+          ?import.meta.env.REACT_APP_BACKEND_URL
+          :"http://localhost:3000/";
+          
     const token= localStorage.getItem('token');
     console.log('Token from local storage',token)
       if(!token){

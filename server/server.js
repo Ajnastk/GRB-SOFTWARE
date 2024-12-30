@@ -11,6 +11,10 @@ const PORT=process.env.PORT || 5000;
 const MONGO_URL=process.env.MONGO_URI;
 const BACKEND_URL=process.env.BACKEND_URL || "http://localhost:3000"
 
+require('dotenv').config();
+console.log("Environment variables loaded:", process.env.CLOUDINARY_CLOUD_NAME);
+
+
 app.use(cors());
 
 app.use(express.json());

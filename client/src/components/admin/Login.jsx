@@ -21,7 +21,7 @@ function Login() {
     const handleSubmit = async (e)=>{
         e.preventDefault();
         
-        const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;
+        const backendUrl = `${import.meta.env.REACT_APP_BACKEND_URL}/`;
 
         console.log(backendUrl)
 

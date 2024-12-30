@@ -35,8 +35,15 @@ const Signup = () => {
       return;
     }
 
+    const backendUrl = import.meta.env.REACT_APP_BACKEND_URL;    
+    
+    if (formData.password !== formData.confirmPassword) {
+      alert("Password does not match");
+      return;
+    }
+
     try {
-      const response = await fetch("http://localhost:3000/api/admin-signup", {
+      const response = await fetch("http://localhost:3000/admin/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

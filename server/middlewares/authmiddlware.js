@@ -11,6 +11,8 @@ const authMiddlware= async(req,res,next)=>{
             return res.status(401).json({error:'Authorization token is required'});
         }
         const token=authHeader.split(" ")[1];
+        console.log("Extracted Token:", token);
+
 
         if(!token){
             return res.status(401).json({error:'Access denied'});

@@ -9,7 +9,7 @@ const { notFound, errorHandler } = require('./middlewares/errorhandler');
 const app=express();
 const PORT=process.env.PORT || 5000;
 const MONGO_URL=process.env.MONGO_URI;
-const FRONTEND_URL=process.env.FRONTEND_URL || "http://localhost:5173";
+const FRONTEND_URL=process.env.FRONTEND_URL || "http://localhost:3001";
 
 
 app.use(cors({

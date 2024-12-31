@@ -53,6 +53,7 @@ const Signup = async (req, res) => {
      // Generate QR Code using the MongoDB `_id`
     //  const qrCodePath = path.join(qrCodesDir, `${getId.name}.png`);
      const qrCodeData = `${frontend}/rating/${getId._id}`;
+     console.log("Generated QR Code Data:", qrCodeData);
      const qrCodeBuffer = await QRCode.toBuffer(qrCodeData);
     //  await QRCode.toFile(qrCodePath, qrCodeData);
  

@@ -7,10 +7,10 @@ export default defineConfig({
   envPrefix: "REACT_APP_",
   plugins: [react(),envCompatible()],
   server: {
-    port: 3001, // Set a specific port for Vite
-    open: true, // Optional: Automatically open the browser
+    port: 3001,// Set a specific port for Vite
+    open: true,// Optional: Automatically open the browser
   },
-   build: {
-    outDir: 'dist', // Specify the output directory for the build
+  build: {
+    outDir: 'dist', // Vite output directory for production build
   },
-})
+});

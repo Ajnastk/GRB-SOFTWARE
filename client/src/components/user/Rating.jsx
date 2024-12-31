@@ -1,9 +1,12 @@
 import { useState } from "react";
 import TextInput from "./TextInput";
+import { useParams } from "react-router-dom";
 
 const Rating = () => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [textInput, setTextInput] = useState("");
+const {adminId} =useParams();
+
 
   const handleRatingChange = (rating) => {
     setSelectedRating(rating);
@@ -19,6 +22,7 @@ const Rating = () => {
     const reviewData = {
       rating: selectedRating,
       description: textInput.trim(),
+      adminId,
     };
 
     

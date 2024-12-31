@@ -11,6 +11,6 @@ export default defineConfig({
     open: true, // Optional: Automatically open the browser
   },
    build: {
-    outDir: 'build', // Specify the output directory for the build
+    outDir: 'dist', // Specify the output directory for the build
   },
 })

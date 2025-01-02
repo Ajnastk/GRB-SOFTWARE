@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const ReviewList = () => {
+const ReviewList = ({ adminId }) => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
@@ -8,23 +8,16 @@ const ReviewList = () => {
   useEffect(() => {
     const fetchReviews = async () => {
 
-
       const backendUrl = import.meta.env.MODE === "production"
           ?import.meta.env.REACT_APP_BACKEND_URL
           :"http://localhost:3000/";
+
           
-      const token= localStorage.getItem('token');
-      if(!token){
-        setError('Authorization token is please login');
-        setLoading(false);
-        return;
-      }
       try {
-        const response = await fetch(`${backendUrl}api/review`,{
+        const response = await fetch(`${backendUrl}api/review${adminId}`,{
           method:'GET',
           headers:{
             'Content-Type':'application/json',
-            Authorization: `Bearer ${token}`,
           }
         })
         console.log('response status',response.status);
@@ -48,8 +41,10 @@ const ReviewList = () => {
       }
     };
 
-    fetchReviews();
-  }, []);
+    if(adminId){
+      fetchReviews();
+    }
+  }, [adminId]);
 
   return (
     <div className="p-4">

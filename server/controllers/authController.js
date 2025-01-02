@@ -12,7 +12,7 @@ console.log(cloudinary.config());
 
 const Signup = async (req, res) => {
 
-  const frontend = process.env.FRONTEND_URL
+  const frontend = `${process.env.FRONTEND_URL}/`
   try {
     //console.log("Request body:", req.body);  // Log the received request
     const { name, email, mobile, googlelink,password,confirmPassword } = req.body;
@@ -35,8 +35,6 @@ const Signup = async (req, res) => {
       password: hashPassword,
       confirmPassword: confirmPassword?.trim(),
       googlelink: googlelink?.trim(),
-    
-
     });
   
 
@@ -52,7 +50,8 @@ const Signup = async (req, res) => {
  
      // Generate QR Code using the MongoDB `_id`
     //  const qrCodePath = path.join(qrCodesDir, `${getId.name}.png`);
-     const qrCodeData = `${frontend}/rating/${getId._id}`;
+     const qrCodeData = `${frontend}rating/${getId._id}`;
+     console.log("Generated QR Code Data:", qrCodeData);
      const qrCodeBuffer = await QRCode.toBuffer(qrCodeData);
     //  await QRCode.toFile(qrCodePath, qrCodeData);
  

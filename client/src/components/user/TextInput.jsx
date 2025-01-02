@@ -1,7 +1,7 @@
 
 const TextInput = ({value,onChange,onCancel,onSubmit}) => {
     return (
-      <div className="relative w-full max-w-lg mt-10 mx-auto px-4 sm:px-0">
+      <div className=" relative mt-10">
         {/* Input Field */}
         <input
           id="text-input"

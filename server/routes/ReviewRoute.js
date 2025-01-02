@@ -4,8 +4,8 @@ const {forDescription , getReviews } = require ('../controllers/reviewController
 const { authMiddlware } =require('../middlewares/authmiddlware')
 const router = express.Router();
 
-router.post('/review-submit',authMiddlware,forDescription);
-router.get('/review',authMiddlware,getReviews)
+router.post('/review-submit/:adminId',forDescription);
+router.get('/review/:adminId',getReviews)
 
 
 module.exports = router;

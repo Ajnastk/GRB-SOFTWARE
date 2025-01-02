@@ -5,11 +5,13 @@ import { useParams } from "react-router-dom";
 const Rating = () => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [textInput, setTextInput] = useState("");
+  const [isVisible,setIsVisble]= useState(false);
 const {adminId} =useParams();
 
 
   const handleRatingChange = (rating) => {
     setSelectedRating(rating);
+    setIsVisble(rating <= 3); // Show input box only for 3 stars or below
   };
 
   const handleSubmit = async () => {
@@ -30,25 +32,18 @@ const {adminId} =useParams();
           ?import.meta.env.REACT_APP_BACKEND_URL
           :"http://localhost:3000/";
           
-    const token= localStorage.getItem('token');
-    console.log('Token from local storage',token)
-      if(!token){
-        alert('You must be logged in to submit a review');
-        return;
-      }
 
     try {
-      const response = await fetch(`${backendUrl}api/review-submit`, {
+      const response = await fetch(`${backendUrl}api/review-submit/${adminId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization:`Bearer ${token}`
         },
         body: JSON.stringify(reviewData),
       });
 
       if (response.ok) {
-        const result = await response.json();
+        const result = await response.json()
 
         if (result.redirectUrl) {
           // Redirect for ratings 4 and above
@@ -69,11 +64,13 @@ const {adminId} =useParams();
   const handleCancel = () => {
     setTextInput("");
     setSelectedRating(0);
+    setIsVisble(false);
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-slate-50">
-      <div className="w-[500px] h-[600px] p-8 bg-white border-4 border-gray-300 rounded-lg shadow-lg">
+      <div className={`p-8 bg-white border-4 border-gray-300 rounded-lg shadow-lg transition-all duration-300${
+      isVisible ? " w-[500px] h-[600px]" : "w-[500px] h-[200px]"}`}>
         {/* Star Rating */}
         <div className="mt-6 flex justify-center">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -84,8 +81,8 @@ const {adminId} =useParams();
               }`}
               onClick={() => handleRatingChange(star)}
               style={{
-                width: "40px",
-                height: "40px",
+                width: "50px",
+                height: "50px",
                 margin: "0 5px",
               }}
             ></div>
@@ -93,12 +90,17 @@ const {adminId} =useParams();
         </div>
 
         {/* Text Input */}
-        <TextInput
+        {isVisible && (
+          <TextInput
           value={textInput}
           onChange={(value) => setTextInput(value)}
           onCancel={handleCancel}
           onSubmit={handleSubmit}
+          isVisible={isVisible}
+
         />
+        )}
+        
       </div>
     </div>
   );

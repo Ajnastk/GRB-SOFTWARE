@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 
-const ReviewList = ({adminId}) => {
+
+const ReviewList = () => {
+
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
@@ -12,12 +14,15 @@ const ReviewList = ({adminId}) => {
           ?import.meta.env.REACT_APP_BACKEND_URL
           :"http://localhost:3000/";
 
-          
+          const token=localStorage.getItem('token');
+
       try {
-        const response = await fetch(`${backendUrl}api/review/${adminId}`,{
+
+        const response = await fetch(`${backendUrl}api/review`,{
           method:'GET',
           headers:{
             'Content-Type':'application/json',
+            Authorization : `Bearer ${token}`
           }
         })
         console.log('response status',response.status);
@@ -41,10 +46,9 @@ const ReviewList = ({adminId}) => {
       }
     };
 
-    if(adminId){
       fetchReviews();
-    }
-  }, [adminId]);
+    
+  }, []);
 
   return (
     <div className="p-4">

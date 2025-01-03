@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const ReviewList = ({ adminId }) => {
+const ReviewList = ({adminId}) => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
@@ -14,7 +14,7 @@ const ReviewList = ({ adminId }) => {
 
           
       try {
-        const response = await fetch(`${backendUrl}api/review${adminId}`,{
+        const response = await fetch(`${backendUrl}api/review/${adminId}`,{
           method:'GET',
           headers:{
             'Content-Type':'application/json',

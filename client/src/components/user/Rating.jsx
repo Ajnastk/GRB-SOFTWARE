@@ -1,6 +1,8 @@
+
+
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import TextInput from "../user/TextInput";
+import TextInput from "../user/TextInput"
 
 const Rating = () => {
   const [selectedRating, setSelectedRating] = useState(0);
@@ -8,17 +10,43 @@ const Rating = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { adminId } = useParams();
 
-  const handleSubmit = async (rating) => {
-    const reviewData = {
-      rating,
-      description: rating <= 3 ? textInput.trim() : undefined,
-    };
+  const handleRatingChange = async (rating) => {
+    setSelectedRating(rating);
+    setIsVisible(rating <= 3);
 
-    // Ensure the description is provided for ratings 3 or below
-    if (rating <= 3 && (!textInput || textInput.trim() === "")) {
+    if (rating >= 4) {
+      try {
+        const backendUrl =
+          import.meta.env.MODE === "production"
+            ? import.meta.env.VITE_BACKEND_URL
+            : "http://localhost:3000/";
+
+        const response = await fetch(`${backendUrl}api/review-submit/${adminId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rating }),
+        });
+
+        const result = await response.json();
+        if (response.ok && result.redirectUrl) {
+          window.location.href = result.redirectUrl; // Redirect immediately
+        } else {
+          alert(`Error: ${result.error || "Unable to redirect to Google review page"}`);
+        }
+      } catch (error) {
+        console.error("Error:", error.message);
+        alert("An error occurred while redirecting to the Google review page.");
+      }
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (selectedRating <= 3 && (!textInput || textInput.trim() === "")) {
       alert("Please provide a description for ratings 3 or below.");
       return;
     }
+
+    const reviewData = { rating: selectedRating, description: textInput.trim() };
 
     const backendUrl =
       import.meta.env.MODE === "production"
@@ -26,41 +54,22 @@ const Rating = () => {
         : "http://localhost:3000/";
 
     try {
-      const response = await fetch(
-        `${backendUrl}api/review-submit/${adminId}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(reviewData),
-        }
-      );
-
-      const result = await response.json();
+      const response = await fetch(`${backendUrl}api/review-submit/${adminId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reviewData),
+      });
 
       if (response.ok) {
-        if (rating >= 4 && result.redirectUrl) {
-          // Redirect for ratings 4 and above
-          window.location.href = result.redirectUrl;
-        } else {
-          // Alert success for ratings 3 and below
-          alert("Review submitted successfully!");
-          handleCancel();
-        }
+        alert("Review submitted successfully!");
+        handleCancel();
       } else {
-        alert(`Failed to submit review: ${result.error || "Server error"}`);
+        const errorData = await response.json();
+        alert(`Failed to submit review: ${errorData.error || "Server error"}`);
       }
     } catch (error) {
       console.error("Error:", error.message);
       alert("An error occurred while submitting your review.");
-    }
-  };
-
-  const handleRatingChange = (rating) => {
-    setSelectedRating(rating);
-    setIsVisible(rating <= 3); // Show input for ratings 3 or below
-
-    if (rating >= 4) {
-      handleSubmit(rating); // Directly handle submission for 4 or 5 stars
     }
   };
 
@@ -90,18 +99,19 @@ const Rating = () => {
             ></div>
           ))}
         </div>
+ {/* Text Input */}
 
-        {/* Text Input */}
+      {isVisible && (
+      <TextInput
+         value={textInput}
+         onChange={(value) => setTextInput(value)}
+       onCancel={handleCancel}
+       onSubmit={handleSubmit}
+        isVisible={isVisible}
 
-        {isVisible && (
-          <TextInput
-            value={textInput}
-            onChange={(value) => setTextInput(value)}
-            onCancel={handleCancel}
-            onSubmit={handleSubmit}
-            isVisible={isVisible}
-          />
-        )}
+        />
+       )}
+        
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 
 
 function Login() {
@@ -10,6 +10,7 @@ function Login() {
     });
 
     const navigate= useNavigate();
+  
 
     const [error,setError]=useState('');
 
@@ -46,7 +47,8 @@ function Login() {
                 const data= await response.json();
                 alert(data.message);
                 localStorage.setItem('token',data.token);
-                navigate(`/review-list/${data.token}`)
+
+                navigate(`/review`)
              }else{
                 const errorData= await response.json();
                 alert(errorData.message);

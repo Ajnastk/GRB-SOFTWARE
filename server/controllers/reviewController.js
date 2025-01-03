@@ -1,7 +1,9 @@
 
 
 const ReviewModel = require("../model/Review");
-const AdminModel = require("../model/AdminSchema");
+const AdminModel = require("../model/AdminSchema"); // Assuming you have the Admin schema
+const jwt=require('jsonwebtoken');
+
 
 const forDescription = async (req, res) => {
   try {
@@ -44,10 +46,16 @@ const forDescription = async (req, res) => {
 
 const getReviews = async (req, res) => {
   try {
-    const adminId = req.params.adminId;
+    const token=req.headers.authorization?.split(' ')[1];
+    if(!token){
+      return res.status(401).json({error:'Authorization token is required'});
+    }
+    const decoded=jwt.verify(token,process.env.JWT_SECRET)
+    const adminId=decoded.adminId;
 
-    if (!adminId) {
-      return res.status(400).json({ error: "Admin Id is required" });
+    console.log('admin id is ',adminId)
+     if (!adminId) {
+      return res.status(400).json({ error: "Invalid token,adminId not found" });
     }
 
     const reviews = await ReviewModel.find({ adminId });

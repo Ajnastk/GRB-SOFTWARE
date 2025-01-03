@@ -46,7 +46,7 @@ function Login() {
                 const data= await response.json();
                 alert(data.message);
                 localStorage.setItem('token',data.token);
-                navigate('/review-list')
+                navigate(`/review-list/${data.token}`)
              }else{
                 const errorData= await response.json();
                 alert(errorData.message);

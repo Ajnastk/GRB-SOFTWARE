@@ -28,6 +28,7 @@ const Rating = () => {
         });
 
         const result = await response.json();
+        console.log('the server response is',result);
         if (response.ok && result.redirectUrl) {
           window.location.href = result.redirectUrl; // Redirect immediately
         } else {

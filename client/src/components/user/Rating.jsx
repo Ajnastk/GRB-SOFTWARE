@@ -1,13 +1,15 @@
-// 
-
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import TextInput from "./TextInput"
+import TextInput from "./TextInput";
+
 const Rating = () => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [textInput, setTextInput] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const { adminId } = useParams();
+
+  const backendUrl =
+    import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/";
 
   const handleRatingChange = async (rating) => {
     setSelectedRating(rating);
@@ -15,11 +17,6 @@ const Rating = () => {
 
     if (rating >= 4) {
       try {
-        const backendUrl =
-          import.meta.env.MODE === "production"
-            ? import.meta.env.VITE_BACKEND_URL
-            : "http://localhost:3000/";
-
         const response = await fetch(`${backendUrl}api/review-submit/${adminId}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -27,7 +24,6 @@ const Rating = () => {
         });
 
         const result = await response.json();
-        console.log('the server response is',result);
         if (response.ok && result.redirectUrl) {
           window.location.href = result.redirectUrl; // Redirect immediately
         } else {
@@ -47,11 +43,6 @@ const Rating = () => {
     }
 
     const reviewData = { rating: selectedRating, description: textInput.trim() };
-
-    const backendUrl =
-      import.meta.env.MODE === "production"
-        ? import.meta.env.VITE_BACKEND_URL
-        : "http://localhost:3000/";
 
     try {
       const response = await fetch(`${backendUrl}api/review-submit/${adminId}`, {
@@ -96,22 +87,20 @@ const Rating = () => {
               }`}
               onClick={() => handleRatingChange(star)}
               style={{ width: "50px", height: "50px", margin: "0 5px" }}
+              aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
             ></div>
           ))}
         </div>
 
         {/* Text Input */}
-       
-      {isVisible && (
-      <TextInput
-         value={textInput}
-         onChange={(value) => setTextInput(value)}
-       onCancel={handleCancel}
-       onSubmit={handleSubmit}
-        isVisible={isVisible}
-
-        />
-       )}
+        {isVisible && (
+          <TextInput
+            value={textInput}
+            onChange={(value) => setTextInput(value)}
+            onCancel={handleCancel}
+            onSubmit={handleSubmit}
+          />
+        )}
       </div>
     </div>
   );

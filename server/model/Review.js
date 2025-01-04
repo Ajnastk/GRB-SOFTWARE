@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 // const { default: Rating } = require('../../client/src/components/user/Rating');
 
 const reviewSchema = new mongoose.Schema({
+
+    adminId: {
+         type: String, required: true
+         },
     rating:{
         type:Number,
         required:true,

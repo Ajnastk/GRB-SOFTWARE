@@ -80,7 +80,7 @@ const ReviewList = () => {
                     )}
                   </div>
                 </div>
-                <p>{review.description}</p> {/* Handle missing comment */}
+                <p className="text-lg from-neutral-800 text-gray-600" >{review.description}</p> {/* Handle missing comment */}
                 <p className="text-sm text-gray-500 mt-2">
                   Date:{" "}
                   {review.createdAt

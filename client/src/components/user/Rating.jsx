@@ -1,9 +1,8 @@
-
+// 
 
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import TextInput from "../user/TextInput"
-
+import TextInput from "./TextInput"
 const Rating = () => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [textInput, setTextInput] = useState("");
@@ -99,8 +98,9 @@ const Rating = () => {
             ></div>
           ))}
         </div>
- {/* Text Input */}
 
+        {/* Text Input */}
+       
       {isVisible && (
       <TextInput
          value={textInput}
@@ -111,7 +111,6 @@ const Rating = () => {
 
         />
        )}
-        
       </div>
     </div>
   );

@@ -12,21 +12,21 @@ const MONGO_URL=process.env.MONGO_URI;
 const FRONTEND_URL=process.env.FRONTEND_URL || "http://localhost:3001";
 
 
-app.use(cors({
-    origin:FRONTEND_URL,
-    credentials:true,
+const corsOptions = {
+    origin: process.env.FRONTEND_URL || "*", // Replace * with the actual frontend URL in production
     methods: ["GET", "POST"],
-    allowedHeaders:["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  };
+  
 
-}));
 
 
+require(dotenv).config();
 
-require('dotenv').config();
 console.log("Environment variables loaded:", process.env.CLOUDINARY_CLOUD_NAME);
 
 
-
+app.use(cors(corsOptions))
 app.use(express.json());
 app.use('/api', AuthRoute);
 app.use('/api', reviewRoutes);

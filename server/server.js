@@ -19,10 +19,6 @@ const corsOptions = {
   };
   
 
-
-
-require(dotenv).config();
-
 console.log("Environment variables loaded:", process.env.CLOUDINARY_CLOUD_NAME);
 
 

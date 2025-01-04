@@ -9,7 +9,7 @@ const Rating = () => {
   const { adminId } = useParams();
 
   const backendUrl =
-    import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/";
+    import.meta.env.REACT_APP_BACKEND_URL || "http://localhost:3000/";
 
   const handleRatingChange = async (rating) => {
     setSelectedRating(rating);

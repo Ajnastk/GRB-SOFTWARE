@@ -73,12 +73,12 @@ const Rating = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-slate-50">
       <div
-        className={`p-8 bg-white border-4 border-gray-300 rounded-lg shadow-lg transition-all duration-300 ${
-          isVisible ? "w-[500px] h-[600px]" : "w-[500px] h-[200px]"
+        className={`p-5 bg-white border-4 border-gray-300 rounded-lg shadow-lg transition-all duration-300 ${
+          isVisible ? "w-[500px] mx-8 h-[600px]" : "w-[500px] mx-8  h-[200px]"
         }`}
       >
         {/* Star Rating */}
-        <div className="mt-6 flex justify-center">
+        <div className="flex justify-center mt-10">
           {[1, 2, 3, 4, 5].map((star) => (
             <div
               key={star}

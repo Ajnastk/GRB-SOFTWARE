@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import TextInput from "./TextInput";
 
+
 const Rating = () => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [textInput, setTextInput] = useState("");
@@ -71,12 +72,23 @@ const Rating = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-50">
+    <div className="relative flex flex-col items-center justify-center min-h-screen bg-slate-50" 
+    >
+       <div className="text-center mb-10 font-arvo font-bold text-3xl">
+      
+        <h1 className="text-2xl font-bold tracking-wide leading-snug">
+          <span className="block text-black animate-reveal">FEEL FREE TO SHARE</span>
+          <span className="block text-yellow-500 animate-reveal">
+            YOUR FEEDBACK</span>
+        </h1>
+      </div>
       <div
-        className={`p-5 bg-white border-4 border-gray-300 rounded-lg shadow-lg transition-all duration-300 ${
-          isVisible ? "w-[500px] mx-8 h-[600px]" : "w-[500px] mx-8  h-[200px]"
+        className={`p-5 bg-white border-4 border-gray-300 rounded-lg shadow-lg transition-all duration-300
+           ${
+          isVisible ? "w-[350px] mx-8 h-[500px]" : "w-[350px] mx-8  h-[200px]"
         }`}
       >
+      
         {/* Star Rating */}
         <div className="flex justify-center mt-10">
           {[1, 2, 3, 4, 5].map((star) => (

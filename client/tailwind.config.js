@@ -1,14 +1,33 @@
 /** @type {import('tailwindcss').Config} */
 
 import daisyui from 'daisyui';
-
 export default {
   content: [
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        arvo: ["Arvo", "serif"],
+      },
+      keyframes:{
+        reveal:{
+          from:{
+            transform :"translateY(80px)",
+            opacity: "0",
+          },
+          to:{
+            transform: "translateY(0px)",
+            opacity: "1",
+          },
+          
+        },
+      },
+      animation: {
+        reveal: "reveal 2.5s forwards",
+      },
+    },
   },
   plugins: [daisyui], // Use the imported `daisyui` plugin
   daisyui: {

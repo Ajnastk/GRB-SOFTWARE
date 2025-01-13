@@ -1,21 +1,21 @@
 
 const TextInput = ({value,onChange,onCancel,onSubmit}) => {
     return (
-      <div className=" relative mt-10">
+      <div className=" relative mt-10 max-w-xl mx-auto">
         {/* Input Field */}
-        <input
-          id="text-input"
-          type="text"
+        <textarea
+          id="text-area"
           placeholder=""
-          className="peer input input-bordered w-full h-40 text-lg bg-slate-50 border-blue-500 text-black placeholder-transparent focus:ring-blue-600"
+          rows={4}
+          className="peer w-full h-40 px-4 py-6 text-lg text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2  focus:ring-blue-600 focus:outline-none placeholder-transparent resize-none"
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
         
         {/* Floating Label */}
         <label
-          htmlFor="text-input"
-          className="absolute left-4 px-3 top-3 text-gray-400 text-lg transition-all peer-placeholder-shown:top-16 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-lg peer-focus:top-4 peer-focus:text-blue-600 peer-focus:text-sm"
+          htmlFor="text-area"
+          className="absolute left-1 w-[280px] px-2 top-10 text-gray-400 text-sm transition-all bg-gray-50  peer-focus:-top-6 peer-focus:rounded-sm peer-focus:text-blue-600 peer-focus:text-sm "
         >
           Share details of your own experience at this place
         </label>

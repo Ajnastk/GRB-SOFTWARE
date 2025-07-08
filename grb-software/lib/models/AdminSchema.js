@@ -42,6 +42,31 @@ const AdminSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    shopName :{
+      type: String,
+      required :true,
+      trim : true,
+    },
+    shopImage:{
+      type:String,
+      default :'',
+      trim :true,
+    },
+    instagramLink:{
+      type : String,
+      default : "",
+      trim :true,
+    },
+    whatsappNumber :{
+      type : String,
+      default : "",
+      trim : true,
+    },
+    portfolioLink : {
+      type : String,
+      default :"",
+      trim : true
+    },
   },
   { timestamps: true }
 );

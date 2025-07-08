@@ -52,7 +52,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-blue-600">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-400 to-purple-500 p-4">
       <main className="bg-white p-6 md:p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
           Login

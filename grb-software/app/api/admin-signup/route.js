@@ -5,13 +5,25 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import QRCode from "qrcode";
 import cloudinary from "@/lib/cloudinaryConfig";
+import formidable from "formidable";
 
 export async function POST(req) {
   await dbConnect();
 
   try {
-    const body = await req.json();
-    const { name, email, mobile, googlelink, password, confirmPassword } = body;
+     const formData = await req.formData();
+
+     const name = formData.get('name');
+     const email = formData.get("email");
+    const mobile = formData.get("mobile");
+    const googlelink = formData.get("googlelink");
+    const password = formData.get("password");
+    const confirmPassword = formData.get("confirmPassword");
+    const shopName = formData.get("shopName");
+    const instagramLink = formData.get("instagramLink");
+    const whatsappNumber = formData.get("whatsappNumber");
+    const portfolioLink = formData.get("portfolioLink");
+    const shopImage = formData.get("shopImage");
 
     if (password !== confirmPassword) {
       return NextResponse.json({ message: "Passwords do not match" }, { status: 400 });
@@ -24,13 +36,36 @@ export async function POST(req) {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
+    let shopImageUrl = "";
+    if (shopImage && shopImage.size > 0) {
+      const arrayBuffer = await shopImage.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      const uploadResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: "admin_shop_images" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(buffer);
+      });
+
+      shopImageUrl = uploadResult.secure_url;
+    }
+
     const newAdmin = new Admin({
-      name,
-      email,
-      mobile,
+      name: name.trim(),
+      email: email.trim(),
+      mobile: mobile.trim(),
       password: hashPassword,
-      confirmPassword: confirmPassword?.trim(),
-      googlelink: googlelink?.trim(),
+      googlelink: googlelink.trim(),
+      shopName: shopName?.trim() || "",
+      instagramLink: instagramLink?.trim() || "",
+      whatsappNumber: whatsappNumber?.trim() || "",
+      portfolioLink: portfolioLink?.trim() || "",
+      shopImage: shopImageUrl,
     });
 
     const savedAdmin = await newAdmin.save();

@@ -17,11 +17,11 @@ export default function Home() {
       </div>
 
       <div className="hero-content text-neutral-content text-center z-10 px-4 sm:px-6">
-        <div className="max-w-[90%] sm:max-w-lg md:max-w-xl lg:max-w-2xl">
-          <h1 className="mb-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight animate-fade-in-down">
+        <div className="max-w-4xl">
+          <h1 className="mb-8 text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight animate-fade-in-down">
             Your Centralized Link & Review Management Hub
           </h1>
-          <p className="mb-6 text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 leading-relaxed animate-fade-in-up">
+          <p className="mb-8 text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 leading-relaxed animate-fade-in-up">
             Effortlessly manage all your links from a single, customizable dashboard. Take control of your reputation with our smart review system—automatically route 4 and 5-star reviews to Google Reviews and address 3-star or lower feedback privately in your admin panel.
           </p>
           <Link href="/admin/login">

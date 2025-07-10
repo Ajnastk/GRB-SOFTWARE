@@ -26,9 +26,15 @@ export default function LoginPage() {
 
   const handleSubmit = async () => {
     try {
+
+      const apiUrl = 
+        process.env.NODE_ENV = 'development'
+        ? process.env.NEXT_PUBLIC_API_URL_DEV
+        : process.env.NEXT_PUBLIC_API_URL_PROD;
+
       setIsLoading(true);
       setError("");
-      const response = await fetch("/api/admin-login", {
+      const response = await fetch(`${apiUrl}/api/admin-login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -9,11 +9,14 @@ export default function ReviewList() {
 
   useEffect(() => {
     const fetchReviews = async () => {
-
       const token = localStorage.getItem("token");
 
       try {
-        const response = await fetch("/api/review", {
+        const apiUrl = (process.env.NODE_ENV = "development"
+          ? process.env.NEXT_PUBLIC_API_URL_DEV
+          : process.env.NEXT_PUBLIC_API_URL_PROD);
+
+        const response = await fetch(`${apiUrl}/api/review`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -91,7 +94,7 @@ export default function ReviewList() {
   //     )}
   //   </div>
   // );
-    return (
+  return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Reviews</h2>
 
@@ -114,15 +117,17 @@ export default function ReviewList() {
                     {review.user || "Anonymous"} {/* Handle missing user */}
                   </h3>
                   <div className="text-yellow-500 text-2xl">
-                    {Array.from({ length: Math.min(review.rating,5) }).map(
+                    {Array.from({ length: Math.min(review.rating, 5) }).map(
                       (_, index) => (
                         <span key={index}>⭐</span>
                       )
                     )}
                   </div>
                 </div>
-
-                <p className="text-lg from-neutral-800 text-gray-600">{review.description}</p> {/* Handle missing comment */}
+                <p className="text-lg from-neutral-800 text-gray-600">
+                  {review.description}
+                </p>{" "}
+                {/* Handle missing comment */}
                 <p className="text-sm text-gray-500 mt-2">
                   Date:{" "}
                   {review.createdAt

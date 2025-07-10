@@ -12,10 +12,22 @@ export default function RatingPage() {
   const [textInput, setTextInput] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const { adminId } = useParams();
+
+   const apiUrl = 
+        process.env.NODE_ENV = 'development'
+        ? process.env.NEXT_PUBLIC_API_URL_DEV
+        : process.env.NEXT_PUBLIC_API_URL_PROD;
+
   
    useEffect(() => {
-    const fetchAdmin = async () => {
-      const res = await fetch(`/api/admin/${adminId}`);
+    const fetchAdmin = async () =>  {
+
+       const apiUrl = 
+        process.env.NODE_ENV = 'development'
+        ? process.env.NEXT_PUBLIC_API_URL_DEV
+        : process.env.NEXT_PUBLIC_API_URL_PROD;
+
+      const res = await fetch(`${apiUrl}/api/admin/${adminId}`);
       const data = await res.json();
       setAdmin(data);
     };
@@ -27,7 +39,7 @@ export default function RatingPage() {
     setIsVisible(rating <= 3);
 
     if (rating >= 4) {
-      const res = await fetch(`/api/review-submit/${adminId}`, {
+      const res = await fetch(`${apiUrl}/api/review-submit/${adminId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ rating }),
@@ -46,7 +58,7 @@ export default function RatingPage() {
       alert("Please add a description for low ratings.");
       return;
     }
-    const res = await fetch(`/api/review-submit/${adminId}`, {
+    const res = await fetch(`${apiUrl}/api/review-submit/${adminId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ rating: selectedRating, description: textInput }),

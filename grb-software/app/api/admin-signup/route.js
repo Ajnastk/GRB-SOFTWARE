@@ -7,6 +7,8 @@ import QRCode from "qrcode";
 import cloudinary from "@/lib/cloudinaryConfig";
 import formidable from "formidable";
 
+const URL = process.env.URL;
+
 export async function POST(req) {
   await dbConnect();
 
@@ -71,7 +73,13 @@ export async function POST(req) {
     const savedAdmin = await newAdmin.save();
 
     // Generate QR code buffer
-    const qrCodeData = `http://localhost:3000/rating/${savedAdmin._id}`;
+
+     const apiUrl = 
+        process.env.NODE_ENV = 'development'
+        ? process.env.NEXT_PUBLIC_API_URL_DEV
+        : process.env.NEXT_PUBLIC_API_URL_PROD;
+
+    const qrCodeData = `${apiUrl}/rating/${savedAdmin._id}`;
     const qrCodeBuffer = await QRCode.toBuffer(qrCodeData);
 
     // Upload QR to Cloudinary

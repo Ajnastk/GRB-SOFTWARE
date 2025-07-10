@@ -55,6 +55,12 @@ export default function SignUpPage() {
       return;
     }
     try {
+
+       const apiUrl = 
+        process.env.NODE_ENV = 'development'
+        ? process.env.NEXT_PUBLIC_API_URL_DEV
+        : process.env.NEXT_PUBLIC_API_URL_PROD;
+
       setIsLoading(true);
       setError("");
       const formPayload = new FormData();
@@ -64,7 +70,7 @@ export default function SignUpPage() {
       if (shopImage) {
         formPayload.append("shopImage", shopImage);
       }
-      const response = await fetch("/api/admin-signup", {
+      const response = await fetch(`${apiUrl}/api/admin-signup`, {
         method: "POST",
         body: formPayload,
       });

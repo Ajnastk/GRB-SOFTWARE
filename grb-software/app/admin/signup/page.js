@@ -57,7 +57,7 @@ export default function SignUpPage() {
     try {
 
        const apiUrl = 
-        process.env.NODE_ENV = 'development'
+        process.env.NODE_ENV === 'development'
         ? process.env.NEXT_PUBLIC_API_URL_DEV
         : process.env.NEXT_PUBLIC_API_URL_PROD;
 
@@ -351,4 +351,3 @@ function InputField({ label, name, type = "text", value, onChange, children, pla
     </div>
   );
 }
-

@@ -13,17 +13,16 @@ export default function RatingPage() {
   const [isVisible, setIsVisible] = useState(false);
   const { adminId } = useParams();
 
-   const apiUrl = 
-        process.env.NODE_ENV = 'development'
-        ? process.env.NEXT_PUBLIC_API_URL_DEV
-        : process.env.NEXT_PUBLIC_API_URL_PROD;
+   const apiUrl = process.env.NODE_ENV === 'development'
+  ? process.env.NEXT_PUBLIC_API_URL_DEV
+  : process.env.NEXT_PUBLIC_API_URL_PROD;
 
   
    useEffect(() => {
     const fetchAdmin = async () =>  {
 
        const apiUrl = 
-        process.env.NODE_ENV = 'development'
+        process.env.NODE_ENV === 'development'
         ? process.env.NEXT_PUBLIC_API_URL_DEV
         : process.env.NEXT_PUBLIC_API_URL_PROD;
 

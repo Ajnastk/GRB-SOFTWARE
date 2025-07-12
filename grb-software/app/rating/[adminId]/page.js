@@ -2,7 +2,7 @@
 
 import { useState,useEffect } from "react";
 import { useParams } from "next/navigation";
-import { Instagram, Phone, Mail, Globe,MoreHorizontal} from 'lucide-react';
+import { Instagram, Phone, Mail, Globe,ArrowRight} from 'lucide-react';
 import Image from "next/image";
 import TextInput from "../../component/textInput";
 
@@ -114,27 +114,28 @@ export default function RatingPage() {
       <div className="w-full max-w-sm mx-auto space-y-6">
         
         {/* Profile Section */}
-        <div className="text-center">
-          <div className="relative w-[150px] h-[150px] rounded-full overflow-hidden shadow-xl mx-auto mb-2">
-            <Image
+        <div className="text-center ">
+          <div className="relative w-[140px] h-[140px] rounded-full overflow-hidden shadow-2xl mx-auto mb-4 ring-4 ring-white/20">
+          <Image
               src={admin.shopImage}
               alt={admin.shopName}
               fill
               className="object-cover"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
           </div>
           
           <h1 className="text-3xl font-bold text-white mb-1">
-            {admin.shopName}
+           🛍️ Welcome to {admin.shopName}
           </h1>
           
-          {/* <p className="text-gray-300 text-sm mb-1">
+           {/* <p className="text-gray-300 text-sm mb-1">
             {admin.subtitle}
           </p>
           
           <p className="text-gray-400 text-xs mb-6">
             {admin.description}
-          </p> */}
+          </p>  */}
 
           {/* Small Social Icons */}
           {/* <div className="flex justify-center gap-3 mb-8">
@@ -170,7 +171,7 @@ export default function RatingPage() {
                     </div>
                     <span className="text-white font-medium">{link.label}</span>
                   </div>
-                  <MoreHorizontal size={20} className="text-gray-400" />
+                  <ArrowRight size={20} className="text-gray-400" />
                 </div>
               </div>
             </a>

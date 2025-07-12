@@ -5,7 +5,8 @@ import { User, Store, Camera, Lock, ExternalLink, Eye, EyeOff } from "lucide-rea
 import Stepper, { Step } from "../../component/Stepper";
 import Link from "next/link";
 import Image from "next/image";
-import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+// import { toast } from "react-toastify";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -21,6 +22,20 @@ export default function SignUpPage() {
     emailLink: "",
     portfolioLink: "",
   });
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    confirmPassword: "",
+    googlelink: "",
+    shopName: "",
+    instagramLink: "",
+    whatsappNumber: "",
+    emailLink: "",
+    portfolioLink: "",
+    shopImage: "",
+  });
   const [shopImage, setShopImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -29,11 +44,118 @@ export default function SignUpPage() {
   const [success, setSuccess] = useState(false);
   const [step, setStep] = useState(1);
 
+  const validateField = (name, value) => {
+    let errorMessage = "";
+    
+    switch (name) {
+      case "name":
+        if (!value.trim()) {
+          errorMessage = "Full name is required";
+        } else if (value.trim().length < 2) {
+          errorMessage = "Name must be at least 2 characters";
+        }
+        break;
+      case "email":
+        if (!value.trim()) {
+          errorMessage = "Email is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          errorMessage = "Please enter a valid email address";
+        }
+        break;
+      case "mobile":
+        if (!value.trim()) {
+          errorMessage = "Mobile number is required";
+        } else if (!/^[0-9]{10}$/.test(value.replace(/\D/g, ''))) {
+          errorMessage = "Please enter a valid 10-digit mobile number";
+        }
+        break;
+      case "shopName":
+        if (!value.trim()) {
+          errorMessage = "Shop name is required";
+        } else if (value.trim().length < 2) {
+          errorMessage = "Shop name must be at least 2 characters";
+        }
+        break;
+      case "instagramLink":
+        if (!value.trim()) {
+          errorMessage = "Instagram link is required";
+        } else if (!value.includes("instagram.com")) {
+          errorMessage = "Please enter a valid Instagram link";
+        }
+        break;
+      case "whatsappNumber":
+        if (!value.trim()) {
+          errorMessage = "WhatsApp number is required";
+        } else if (!/^[0-9]{10}$/.test(value.replace(/\D/g, ''))) {
+          errorMessage = "Please enter a valid 10-digit WhatsApp number";
+        }
+        break;
+      case "emailLink":
+        if (!value.trim()) {
+          errorMessage = "Email link is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          errorMessage = "Please enter a valid email address";
+        }
+        break;
+      case "portfolioLink":
+        if (!value.trim()) {
+          errorMessage = "Portfolio link is required";
+        } else if (!value.startsWith("http://") && !value.startsWith("https://")) {
+          errorMessage = "Please enter a valid URL starting with http:// or https://";
+        }
+        break;
+      case "googlelink":
+        if (!value.trim()) {
+          errorMessage = "Google review link is required";
+        } else if (!value.includes("google.com") && !value.includes("maps.google.com") && !value.includes("goo.gl") && !value.includes("maps.app.goo.gl") && !value.includes("g.page")) {
+          errorMessage = "Please enter a valid Google Maps or Google review link";
+        }
+        break;
+      case "password":
+        if (!value.trim()) {
+          errorMessage = "Password is required";
+        } else if (value.length < 6) {
+          errorMessage = "Password must be at least 6 characters";
+        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value)) {
+          errorMessage = "Password must contain at least one uppercase letter, one lowercase letter, and one number";
+        }
+        break;
+      case "confirmPassword":
+        if (!value.trim()) {
+          errorMessage = "Please confirm your password";
+        } else if (value !== formData.password) {
+          errorMessage = "Passwords do not match";
+        }
+        break;
+      default:
+        break;
+    }
+    
+    return errorMessage;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+    }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ""
+      }));
+    }
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    const errorMessage = validateField(name, value);
+    setErrors(prev => ({
+      ...prev,
+      [name]: errorMessage
     }));
   };
 
@@ -45,18 +167,69 @@ export default function SignUpPage() {
       reader.onloadend = () => setPreviewImage(reader.result);
       reader.readAsDataURL(file);
     }
+    
+    // Clear image error
+    if (errors.shopImage) {
+      setErrors(prev => ({
+        ...prev,
+        shopImage: ""
+      }));
+    }
   };
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
+  const validateStep = (stepNum) => {
+    const newErrors = { ...errors };
+    let hasErrors = false;
+
+    switch (stepNum) {
+      case 1:
+        ["name", "email", "mobile"].forEach(field => {
+          const errorMessage = validateField(field, formData[field]);
+          newErrors[field] = errorMessage;
+          if (errorMessage) hasErrors = true;
+        });
+        break;
+      case 2:
+        const shopNameError = validateField("shopName", formData.shopName);
+        newErrors.shopName = shopNameError;
+        if (shopNameError) hasErrors = true;
+        
+        if (!shopImage) {
+          newErrors.shopImage = "Shop image is required";
+          hasErrors = true;
+        }
+        break;
+      case 3:
+        ["instagramLink", "whatsappNumber", "emailLink", "portfolioLink", "googlelink"].forEach(field => {
+          const errorMessage = validateField(field, formData[field]);
+          newErrors[field] = errorMessage;
+          if (errorMessage) hasErrors = true;
+        });
+        break;
+      case 4:
+        ["password", "confirmPassword"].forEach(field => {
+          const errorMessage = validateField(field, formData[field]);
+          newErrors[field] = errorMessage;
+          if (errorMessage) hasErrors = true;
+        });
+        break;
+    }
+
+    setErrors(newErrors);
+    return !hasErrors;
+  };
+
   const handleSubmit = async () => {
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.");
+    // Validate all steps before submitting
+    if (!validateStep(1) || !validateStep(2) || !validateStep(3) || !validateStep(4)) {
+      setError("Please fix all validation errors before submitting.");
       return;
     }
-    try {
 
-       const apiUrl = 
+    try {
+      const apiUrl = 
         process.env.NODE_ENV === 'development'
         ? process.env.NEXT_PUBLIC_API_URL_DEV
         : process.env.NEXT_PUBLIC_API_URL_PROD;
@@ -77,10 +250,17 @@ export default function SignUpPage() {
       const data = await response.json();
       if (response.ok) {
         setSuccess(true);
-        toast.success("Registration completed successfully");
-        // setTimeout(() => {
-        //   window.location.href = "/admin/login";
-        // }, 2000);
+        Swal.fire({
+          title: "Success!",
+          text: "Registration completed successfully",
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#10b981",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/admin/login";
+          }
+        });
       } else {
         setError(data.message || "Signup failed. Please try again.");
       }
@@ -99,23 +279,33 @@ export default function SignUpPage() {
         return (
           formData.name.trim() &&
           formData.email.trim() &&
-          formData.mobile.trim()
+          formData.mobile.trim() &&
+          !errors.name &&
+          !errors.email &&
+          !errors.mobile
         );
       case 2:
-        return formData.shopName.trim() && shopImage;
+        return formData.shopName.trim() && shopImage && !errors.shopName && !errors.shopImage;
       case 3:
         return (
           formData.instagramLink.trim() &&
           formData.whatsappNumber.trim() &&
           formData.emailLink.trim() &&
           formData.portfolioLink.trim() &&
-          formData.googlelink.trim()
+          formData.googlelink.trim() &&
+          !errors.instagramLink &&
+          !errors.whatsappNumber &&
+          !errors.emailLink &&
+          !errors.portfolioLink &&
+          !errors.googlelink
         );
       case 4:
         return (
           formData.password.trim() &&
           formData.confirmPassword.trim() &&
-          formData.password === formData.confirmPassword
+          formData.password === formData.confirmPassword &&
+          !errors.password &&
+          !errors.confirmPassword
         );
       default:
         return false;
@@ -170,7 +360,9 @@ export default function SignUpPage() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="Enter your full name"
+                error={errors.name}
               />
               <InputField
                 label="Email Address"
@@ -178,8 +370,10 @@ export default function SignUpPage() {
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="your@email.com"
                 autoComplete="username"
+                error={errors.email}
               />
               <InputField
                 label="Mobile Number"
@@ -188,7 +382,9 @@ export default function SignUpPage() {
                 pattern="[0-9]{10}"
                 value={formData.mobile}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="1234567890"
+                error={errors.mobile}
               />
             </div>
           </Step>
@@ -205,7 +401,9 @@ export default function SignUpPage() {
                 name="shopName"
                 value={formData.shopName}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="Enter your shop name"
+                error={errors.shopName}
               />
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">Shop Image</label>
@@ -226,6 +424,9 @@ export default function SignUpPage() {
                     <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                   </label>
                 </div>
+                {errors.shopImage && (
+                  <p className="text-red-500 text-sm mt-1">{errors.shopImage}</p>
+                )}
               </div>
             </div>
           </Step>
@@ -243,14 +444,18 @@ export default function SignUpPage() {
                 type="url"
                 value={formData.instagramLink}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="https://instagram.com/yourshop"
+                error={errors.instagramLink}
               />
               <InputField
                 label="WhatsApp Number"
                 name="whatsappNumber"
                 value={formData.whatsappNumber}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="1234567890"
+                error={errors.whatsappNumber}
               />
               <InputField
                 label="Email Link"
@@ -258,7 +463,9 @@ export default function SignUpPage() {
                 type="email"
                 value={formData.emailLink}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="contact@yourshop.com"
+                error={errors.emailLink}
               />
               <InputField
                 label="Portfolio Link"
@@ -266,7 +473,9 @@ export default function SignUpPage() {
                 type="url"
                 value={formData.portfolioLink}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="https://yourportfolio.com"
+                error={errors.portfolioLink}
               />
               <InputField
                 label="Google Review Link"
@@ -274,7 +483,9 @@ export default function SignUpPage() {
                 type="url"
                 value={formData.googlelink}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="https://maps.google.com/..."
+                error={errors.googlelink}
               />
             </div>
           </Step>
@@ -292,10 +503,12 @@ export default function SignUpPage() {
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="Enter a strong password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 showPassword={showPassword}
                 setShowPassword={setShowPassword}
+                error={errors.password}
               />
               <InputField
                 label="Confirm Password"
@@ -303,10 +516,21 @@ export default function SignUpPage() {
                 type={showPassword ? "text" : "password"}
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="Confirm your password"
                 showPassword={showPassword}
                 setShowPassword={setShowPassword}
+                error={errors.confirmPassword}
               />
+              
+                             <button
+                 type="button"
+                 onClick={handleSubmit}
+                 disabled={!isStepValid(4) || isLoading}
+                 className="w-full mt-4 flex items-center justify-center rounded-full bg-green-500 py-1.5 px-3.5 font-medium tracking-tight text-white transition hover:bg-green-600 active:bg-green-700 disabled:opacity-50"
+               >
+                 {isLoading ? "Creating Account..." : "Sign Up"}
+               </button>
             </div>
           </Step>
         </Stepper>
@@ -318,7 +542,7 @@ export default function SignUpPage() {
   );
 }
 
-function InputField({ label, name, type = "text", value, onChange, children, placeholder, showPassword, setShowPassword, ...props }) {
+function InputField({ label, name, type = "text", value, onChange, onBlur, children, placeholder, showPassword, setShowPassword, error, ...props }) {
   return (
     <div className="space-y-2">
       <label htmlFor={name} className="block text-sm font-medium text-gray-700">
@@ -331,12 +555,15 @@ function InputField({ label, name, type = "text", value, onChange, children, pla
           id={name}
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
           placeholder={placeholder}
           required
-          className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors pr-12"
+          className={`w-full px-4 py-3 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors pr-12 ${
+            error ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
+          }`}
           {...props}
         />
-        {name === "password" && setShowPassword && (
+        {(name === "password" || name === "confirmPassword") && setShowPassword && (
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
@@ -348,6 +575,9 @@ function InputField({ label, name, type = "text", value, onChange, children, pla
         )}
         {children}
       </div>
+      {error && (
+        <p className="text-red-500 text-sm mt-1">{error}</p>
+      )}
     </div>
   );
 }

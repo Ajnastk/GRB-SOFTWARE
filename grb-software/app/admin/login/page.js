@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import Stepper, { Step } from "../../component/Stepper"; // Assuming Stepper is in this path
+import Stepper, { Step } from "../../component/Stepper";
+import Swal from "sweetalert2"; // Assuming Stepper is in this path
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -24,7 +25,8 @@ export default function LoginPage() {
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault(); // Prevent default form submission
     try {
 
       const apiUrl = 
@@ -47,9 +49,18 @@ export default function LoginPage() {
 
       if (response.ok) {
         const data = await response.json();
-        alert(data.message);
-        localStorage.setItem("token", data.token);
-        router.push("/admin/adminPage"); // Redirect to admin dashboard
+        Swal.fire({
+          title: "Success!",
+          text: data.message,
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#10b981",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            localStorage.setItem("token", data.token);
+            router.push("/admin/adminPage"); // Redirect to admin dashboard
+          }
+        });
       } else {
         const errorData = await response.json();
         setError(errorData.message);
@@ -69,9 +80,7 @@ export default function LoginPage() {
           initialStep={1}
           onFinalStepCompleted={handleSubmit}
           nextButtonText="Sign In"
-          nextButtonProps={{
-            disabled: isLoading || !formData.email.trim() || !formData.password.trim(),
-          }}
+          // Remove nextButtonProps from Stepper, as the button will be inside the form
           backButtonProps={{
             disabled: true, // No back button for single-step form
           }}
@@ -97,33 +106,42 @@ export default function LoginPage() {
           }
         >
           <Step>
-            <div className="space-y-6">
-              <div className="text-center mb-8">
-                <User className="mx-auto h-16 w-16 text-blue-500 mb-4" />
-                <h3 className="text-2xl font-bold text-gray-800">Welcome Back</h3>
-                <p className="text-gray-600">Sign in to your account</p>
+            <form onSubmit={handleSubmit} autoComplete="on">
+              <div className="space-y-6">
+                <div className="text-center mb-8">
+                  <User className="mx-auto h-16 w-16 text-blue-500 mb-4" />
+                  <h3 className="text-2xl font-bold text-gray-800">Welcome Back</h3>
+                  <p className="text-gray-600">Sign in to your account</p>
+                </div>
+                <InputField
+                  label="Email Address"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="your@email.com"
+                  autoComplete="username"
+                />
+                <InputField
+                  label="Password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
+                />
+                <button
+                  type="submit"
+                  className="w-full mt-8 flex items-center justify-center  rounded-full bg-green-500 py-2 px-4 font-medium tracking-tight text-white transition hover:bg-green-600 active:bg-green-700 disabled:opacity-50"
+                  disabled={isLoading}
+                >
+                  Sign In
+                </button>
               </div>
-              <InputField
-                label="Email Address"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="your@email.com"
-                autoComplete="username"
-              />
-              <InputField
-                label="Password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                value={formData.password}
-                onChange={handleInputChange}
-                placeholder="Enter your password"
-                autoComplete="current-password"
-                showPassword={showPassword}
-                setShowPassword={setShowPassword}
-              />
-            </div>
+            </form>
           </Step>
         </Stepper>
       </div>
@@ -131,7 +149,7 @@ export default function LoginPage() {
   );
 }
 
-function InputField({ label, name, type = "text", value, onChange, children, placeholder, icon, showPassword, setShowPassword, ...props }) {
+function InputField({ label, name, type = "text", value, onChange, children, placeholder, icon, showPassword, setShowPassword,required, ...props }) {
   return (
     <div className="space-y-2">
       <label htmlFor={name} className="block text-sm font-medium text-gray-700">

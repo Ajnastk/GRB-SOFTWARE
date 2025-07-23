@@ -36,7 +36,7 @@ export async function POST(req, { params }) {
     } else if (rating >= 4) {
       const adminData = await AdminModel.findById(adminId);
 
-      if (!adminData || !adminData.googlelink) {
+      if (!adminData || !adminData.googleLink) {
         return NextResponse.json(
           { error: "Google review link is not configured." },
           { status: 500 }
@@ -44,7 +44,7 @@ export async function POST(req, { params }) {
       }
 
       return NextResponse.json(
-        { redirectUrl: adminData.googlelink },
+        { redirectUrl: adminData.googleLink },
         { status: 200 }
       );
     }

@@ -20,7 +20,7 @@ const AdminSchema = new mongoose.Schema(
       match: [/^\d{10}$/, "Please enter a valid 10-digit mobile number"],
       trim: true,
     },
-    googlelink: {
+    googleLink: {
       type: String,
       required: [true, "Google review link is required"],
       validate: {
@@ -42,31 +42,43 @@ const AdminSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
-    shopName :{
+    shopName: {
       type: String,
-      required :true,
-      trim : true,
+      required: true,
+      trim: true,
     },
-    shopImage:{
-      type:String,
-      default :'',
-      trim :true,
+    shopImage: {
+      type: String,
+      default: '',
+      trim: true,
     },
-    instagramLink:{
-      type : String,
-      default : "",
-      trim :true,
+    instagramLink: {
+      type: String,
+      default: "",
+      trim: true,
     },
-    whatsappNumber :{
-      type : String,
-      default : "",
-      trim : true,
+    whatsappNumber: {
+      type: String,
+      default: "",
+      trim: true,
     },
-    portfolioLink : {
-      type : String,
-      default :"",
-      trim : true
+
+    portfolioLink: {
+      type: String,
+      default: "",
+      trim: true
     },
+    customLinkTitle: {
+      type: String,
+      default: "",
+      trim: true,
+      required :false
+    },
+    customLink: {
+      type: String,
+      default: "",
+      trim: true
+    }
   },
   { timestamps: true }
 );

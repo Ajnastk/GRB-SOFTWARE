@@ -15,11 +15,12 @@ export default function SignUpPage() {
     mobile: "",
     password: "",
     confirmPassword: "",
-    googlelink: "",
+    googleLink: "",
     shopName: "",
     instagramLink: "",
     whatsappNumber: "",
-    emailLink: "",
+    customLinkTitle: "",
+    customLink: "",
     portfolioLink: "",
   });
   const [errors, setErrors] = useState({
@@ -28,11 +29,12 @@ export default function SignUpPage() {
     mobile: "",
     password: "",
     confirmPassword: "",
-    googlelink: "",
+    googleLink: "",
     shopName: "",
     instagramLink: "",
     whatsappNumber: "",
-    emailLink: "",
+    customLinkTitle:"",
+    customLink: "",
     portfolioLink: "",
     shopImage: "",
   });
@@ -90,11 +92,16 @@ export default function SignUpPage() {
           errorMessage = "Please enter a valid 10-digit WhatsApp number";
         }
         break;
-      case "emailLink":
+      case "customLinkTitle":
+        if(!value.trim()){
+          errorMessage = "custom title is required"
+        }
+      break;
+      case "customLink":
         if (!value.trim()) {
-          errorMessage = "Email link is required";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          errorMessage = "Please enter a valid email address";
+          errorMessage = "Custom link is required";
+        } else if (!/^(https?:\/\/)?([a-zA-Z0-9\-._~%!$&'()*+,;=]+@)?([a-zA-Z0-9\-._~]+)(:\d+)?(\/[^\s?#]*)?(\?[^\s#]*)?(#[^\s]*)?$/.test(value)) {
+          errorMessage = "Please enter a valid link";
         }
         break;
       case "portfolioLink":
@@ -104,7 +111,7 @@ export default function SignUpPage() {
           errorMessage = "Please enter a valid URL starting with http:// or https://";
         }
         break;
-      case "googlelink":
+      case "googleLink":
         if (!value.trim()) {
           errorMessage = "Google review link is required";
         } else if (!value.includes("google.com") && !value.includes("maps.google.com") && !value.includes("goo.gl") && !value.includes("maps.app.goo.gl") && !value.includes("g.page")) {
@@ -143,6 +150,10 @@ export default function SignUpPage() {
     const { name, value } = e.target;
     let processedValue = value;
     
+    //capitalize first letter for customNameLink
+    if(name === 'customLinkTitle'){
+processedValue = capitalizeFirstLetter(value);
+    }
     // Capitalize first letter for shop name
     if (name === "shopName") {
       processedValue = capitalizeFirstLetter(value);
@@ -214,7 +225,7 @@ export default function SignUpPage() {
         }
         break;
       case 3:
-        ["instagramLink", "whatsappNumber", "emailLink", "portfolioLink", "googlelink"].forEach(field => {
+        ["instagramLink", "whatsappNumber","customName", "customLinkTitle", "portfolioLink", "googleLink"].forEach(field => {
           const errorMessage = validateField(field, formData[field]);
           newErrors[field] = errorMessage;
           if (errorMessage) hasErrors = true;
@@ -302,14 +313,16 @@ export default function SignUpPage() {
         return (
           formData.instagramLink.trim() &&
           formData.whatsappNumber.trim() &&
-          formData.emailLink.trim() &&
+          formData.customLinkTitle.trim() &&
+          formData.customLink.trim() &&
           formData.portfolioLink.trim() &&
-          formData.googlelink.trim() &&
+          formData.googleLink.trim() &&
           !errors.instagramLink &&
           !errors.whatsappNumber &&
-          !errors.emailLink &&
+          !error.customLinkTitle &&
+          !errors.customLink &&
           !errors.portfolioLink &&
-          !errors.googlelink
+          !errors.googleLink
         );
       case 4:
         return (
@@ -470,14 +483,23 @@ export default function SignUpPage() {
                 error={errors.whatsappNumber}
               />
               <InputField
-                label="Email Link"
-                name="emailLink"
-                type="email"
-                value={formData.emailLink}
+              label="Custom Title"
+              name="customLinkTitle"
+              value={formData.customLinkTitle}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Link title"
+              error={errors.customLinkTitle}
+              />
+              <InputField
+                label="Custom Link"
+                name="customLink"
+                type="url"
+                value={formData.customLink}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder="contact@yourshop.com"
-                error={errors.emailLink}
+                placeholder="Link address"
+                error={errors.customLink}
               />
               <InputField
                 label="Portfolio Link"
@@ -491,13 +513,13 @@ export default function SignUpPage() {
               />
               <InputField
                 label="Google Review Link"
-                name="googlelink"
+                name="googleLink"
                 type="url"
-                value={formData.googlelink}
+                value={formData.googleLink}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 placeholder="https://maps.google.com/..."
-                error={errors.googlelink}
+                error={errors.googleLink}
               />
             </div>
           </Step>

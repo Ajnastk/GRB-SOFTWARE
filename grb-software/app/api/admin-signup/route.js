@@ -18,7 +18,7 @@ export async function POST(req) {
      const name = formData.get('name');
      const email = formData.get("email");
     const mobile = formData.get("mobile");
-    const googlelink = formData.get("googlelink");
+    const googleLink = formData.get("googleLink");
     const password = formData.get("password");
     const confirmPassword = formData.get("confirmPassword");
     const shopName = formData.get("shopName");
@@ -26,6 +26,8 @@ export async function POST(req) {
     const whatsappNumber = formData.get("whatsappNumber");
     const portfolioLink = formData.get("portfolioLink");
     const shopImage = formData.get("shopImage");
+    const customLink = formData.get("customLink");
+    const customLinkTitle = formData.get("customLinkTitle");
 
     if (password !== confirmPassword) {
       return NextResponse.json({ message: "Passwords do not match" }, { status: 400 });
@@ -62,10 +64,12 @@ export async function POST(req) {
       email: email.trim(),
       mobile: mobile.trim(),
       password: hashPassword,
-      googlelink: googlelink.trim(),
+      googleLink: googleLink.trim(),
       shopName: shopName?.trim() || "",
       instagramLink: instagramLink?.trim() || "",
       whatsappNumber: whatsappNumber?.trim() || "",
+      customLinkTitle: customLinkTitle?.trim() || "",
+      customLink: customLink?.trim() || "",
       portfolioLink: portfolioLink?.trim() || "",
       shopImage: shopImageUrl,
     });

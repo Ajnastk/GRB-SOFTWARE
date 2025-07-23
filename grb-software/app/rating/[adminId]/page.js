@@ -1,53 +1,72 @@
 "use client";
 
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { Instagram, Phone, Mail, Globe,ArrowRight} from 'lucide-react';
+import { Instagram, Phone, Mail, Globe, ArrowRight } from 'lucide-react';
 import Image from "next/image";
 import TextInput from "../../component/textInput";
 
 export default function RatingPage() {
-  const [admin, setAdmin] = useState();
+  const [admin, setAdmin] = useState(null);
   const [selectedRating, setSelectedRating] = useState(0);
   const [textInput, setTextInput] = useState("");
   const [isVisible, setIsVisible] = useState(false);
-  const { adminId } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const params = useParams();
+  const adminId = params?.adminId;
 
-   const apiUrl = process.env.NODE_ENV === 'development'
-  ? process.env.NEXT_PUBLIC_API_URL_DEV
-  : process.env.NEXT_PUBLIC_API_URL_PROD;
+  const apiUrl = process.env.NODE_ENV === 'development'
+    ? process.env.NEXT_PUBLIC_API_URL_DEV
+    : process.env.NEXT_PUBLIC_API_URL_PROD;
 
-  
-   useEffect(() => {
-    const fetchAdmin = async () =>  {
-
-       const apiUrl = 
-        process.env.NODE_ENV === 'development'
-        ? process.env.NEXT_PUBLIC_API_URL_DEV
-        : process.env.NEXT_PUBLIC_API_URL_PROD;
-
-      const res = await fetch(`${apiUrl}/api/admin/${adminId}`);
-      const data = await res.json();
-      setAdmin(data);
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      if (!adminId) return;
+      
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const res = await fetch(`${apiUrl}/api/admin/${adminId}`);
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
+        const data = await res.json();
+        setAdmin(data);
+      } catch (err) {
+        console.error('Error fetching admin:', err);
+        setError('Failed to load admin data');
+      } finally {
+        setLoading(false);
+      }
     };
+
     fetchAdmin();
-  }, [adminId]);
+  }, [adminId, apiUrl]);
 
   const handleRatingChange = async (rating) => {
     setSelectedRating(rating);
     setIsVisible(rating <= 3);
 
     if (rating >= 4) {
-      const res = await fetch(`${apiUrl}/api/review-submit/${adminId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rating }),
-      });
-      const result = await res.json();
-      if (result.redirectUrl) {
-        window.location.href = result.redirectUrl;
-      } else {
-        alert(result.error || "Unable to redirect.");
+      try {
+        const res = await fetch(`${apiUrl}/api/review-submit/${adminId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rating }),
+        });
+        
+        const result = await res.json();
+        if (result.redirectUrl) {
+          window.location.href = result.redirectUrl;
+        } else {
+          alert(result.error || "Unable to redirect.");
+        }
+      } catch (err) {
+        console.error('Error submitting rating:', err);
+        alert("Failed to submit rating. Please try again.");
       }
     }
   };
@@ -57,28 +76,54 @@ export default function RatingPage() {
       alert("Please add a description for low ratings.");
       return;
     }
-    const res = await fetch(`${apiUrl}/api/review-submit/${adminId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ rating: selectedRating, description: textInput }),
-    });
-    const result = await res.json();
-    if (res.ok) {
-      alert("Review submitted successfully.");
-      setTextInput("");
-      setSelectedRating(0);
-      setIsVisible(false);
-    } else {
-      alert(result.error || "Failed to submit.");
+    
+    try {
+      const res = await fetch(`${apiUrl}/api/review-submit/${adminId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rating: selectedRating, description: textInput }),
+      });
+      
+      const result = await res.json();
+      if (res.ok) {
+        alert("Review submitted successfully.");
+        setTextInput("");
+        setSelectedRating(0);
+        setIsVisible(false);
+      } else {
+        alert(result.error || "Failed to submit.");
+      }
+    } catch (err) {
+      console.error('Error submitting review:', err);
+      alert("Failed to submit review. Please try again.");
     }
   };
 
-   if (!admin) return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
-      <div className="text-white text-lg">Loading...</div>
-    </div>
-  );
-      const socialLinks = [
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
+        <div className="loader"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
+        <div className="text-red-400 text-lg">{error}</div>
+      </div>
+    );
+  }
+
+  if (!admin) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
+        <div className="text-white text-lg">Admin not found</div>
+      </div>
+    );
+  }
+
+  const socialLinks = [
     {
       label: "WhatsApp",
       href: `https://wa.me/${admin.whatsappNumber}`,
@@ -102,21 +147,20 @@ export default function RatingPage() {
     },
     {
       label: "Email",
-      href: `mailto:${admin.email}`,
+      href: `mailto:${admin.emailLink || admin.email}`,
       icon: Mail,
-      show: admin.email,
+      show: admin.emailLink || admin.email,
       color: "bg-yellow-500"
     }
   ];
 
-    return (
+  return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-sm mx-auto space-y-6">
-        
         {/* Profile Section */}
-        <div className="text-center ">
-          <div className="relative w-[140px] h-[140px] rounded-full overflow-hidden shadow-2xl mx-auto mb-4 ring-4 ring-white/20">
-          <Image
+        <div className="text-center">
+          <div className="relative w-[100px] h-[100px] rounded-full overflow-hidden shadow-2xl mx-auto mb-4 ring-4 ring-white/20">
+            <Image
               src={admin.shopImage}
               alt={admin.shopName}
               fill
@@ -125,35 +169,12 @@ export default function RatingPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
           </div>
           
-          <h1 className="text-3xl font-bold text-white mb-1">
-           🛍️ Welcome to {admin.shopName}
+          <h1 className="text-2xl font-semibold text-white mt-2">
+            {admin.shopName}
           </h1>
-          
-           {/* <p className="text-gray-300 text-sm mb-1">
-            {admin.subtitle}
-          </p>
-          
-          <p className="text-gray-400 text-xs mb-6">
-            {admin.description}
-          </p>  */}
-
-          {/* Small Social Icons */}
-          {/* <div className="flex justify-center gap-3 mb-8">
-            {socialLinks.filter(link => link.show).map((link, index) => (
-              <a
-                key={index}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <link.icon size={20} />
-              </a>
-            ))}
-          </div> */}
         </div>
 
-        {/* Column-based Social Links (Like Reference Image) */}
+        {/* Column-based Social Links */}
         <div className="space-y-3">
           {socialLinks.filter(link => link.show).map((link, index) => (
             <a
@@ -251,42 +272,4 @@ export default function RatingPage() {
       `}</style>
     </div>
   );
-
-  // return (
-  //   <div className="min-h-screen flex flex-col items-center justify-center bg-black p-4">
-  //     {admin.shopImage && (
-  //       <Image src={admin.shopImage} alt="Shop" width={150} height={150} className="rounded-full shadow-lg border-4 border-white" />
-  //     )}
-  //     <h1 className="text-2xl font-bold mt-4 text-gray-800">{admin.shopName}</h1>
-
-  //     <div className="flex gap-4 mt-4">
-  //       {admin.instagramLink && <a href={admin.instagramLink} target="_blank" rel="noopener noreferrer" className="bg-pink-500 p-3 rounded-full text-white shadow-md hover:scale-105 transition"><Instagram /></a>}
-  //       {admin.whatsappNumber && <a href={`https://wa.me/${admin.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="bg-green-500 p-3 rounded-full text-white shadow-md hover:scale-105 transition"><Phone /></a>}
-  //       {admin.email && <a href={`mailto:${admin.emailLink}`} className="bg-yellow-500 p-3 rounded-full text-white shadow-md hover:scale-105 transition"><Mail /></a>}
-  //       {admin.portfolioLink && <a href={admin.portfolioLink} target="_blank" rel="noopener noreferrer" className="bg-blue-600 p-3 rounded-full text-white shadow-md hover:scale-105 transition"><Globe /></a>}
-  //     </div>
-
-  //     <div className="mt-8 flex space-x-2">
-  //       {[1, 2, 3, 4, 5].map((star) => (
-  //         <button
-  //           key={star}
-  //           onClick={() => handleRatingChange(star)}
-  //           className={`text-4xl ${selectedRating >= star ? "text-yellow-400" : "text-gray-300"}`}
-  //         >★</button>
-  //       ))}
-  //     </div>
-
-  //     {isVisible && (
-  //       <div className="mt-4 w-full max-w-md">
-  //         <TextInput
-  //           value={textInput}
-  //           onChange={setTextInput}
-  //           onSubmit={handleSubmit}
-  //           onCancel={() => { setTextInput(""); setIsVisible(false); setSelectedRating(0); }}
-  //         />
-  //       </div>
-  //     )}
-  //   </div>
-  // );
-
 }

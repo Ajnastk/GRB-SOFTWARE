@@ -3,11 +3,10 @@ import dbConnect from "@/lib/dbConnect";
 import Admin from "@/lib/models/AdminSchema";
 
 export async function GET(req, {params}){
-    await dbConnect();
-
     try {
         
-        const {adminId} = params;
+        const { adminId } = await params;
+        await dbConnect();
         const admin = await Admin.findById(adminId).lean();
 
         if(!admin){

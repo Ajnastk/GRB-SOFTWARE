@@ -134,11 +134,23 @@ export default function SignUpPage() {
     return errorMessage;
   };
 
+  const capitalizeFirstLetter = (str) => {
+    if (!str) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let processedValue = value;
+    
+    // Capitalize first letter for shop name
+    if (name === "shopName") {
+      processedValue = capitalizeFirstLetter(value);
+    }
+    
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: processedValue,
     }));
     
     // Clear error when user starts typing

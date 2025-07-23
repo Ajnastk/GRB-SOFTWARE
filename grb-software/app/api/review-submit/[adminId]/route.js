@@ -4,10 +4,9 @@ import ReviewModel from "@/lib/models/ReviewSchema";
 import AdminModel from "@/lib/models/AdminSchema";
 
 export async function POST(req, { params }) {
-  await dbConnect();
-
   try {
-    const { adminId } = params;
+   const { adminId } = await params; 
+   await dbConnect();
     const { rating, description } = await req.json();
 
     if (!adminId) {

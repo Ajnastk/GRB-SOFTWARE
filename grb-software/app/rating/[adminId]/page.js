@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { Instagram, Phone, Mail, Globe, ArrowRight } from 'lucide-react';
+import { Instagram, Phone, X, Globe, ArrowRight } from 'lucide-react';
 import Image from "next/image";
 import TextInput from "../../component/textInput";
 
@@ -127,30 +127,28 @@ export default function RatingPage() {
     {
       label: "WhatsApp",
       href: `https://wa.me/${admin.whatsappNumber}`,
-      icon: Phone,
+      // icon: Phone,
       show: admin.whatsappNumber,
-      color: "bg-green-500"
+      // color: "bg-green-500"
     },
     {
       label: "Instagram", 
       href: admin.instagramLink,
-      icon: Instagram,
+      // icon: Instagram,
       show: admin.instagramLink,
-      color: "bg-pink-500"
+      // color: "bg-pink-500"
     },
     {
       label: "Website",
       href: admin.portfolioLink,
-      icon: Globe,
+      // icon: Globe,
       show: admin.portfolioLink,
-      color: "bg-blue-500"
+      // color: "bg-blue-500"
     },
     {
-      label: "Email",
-      href: `mailto:${admin.emailLink || admin.email}`,
-      icon: Mail,
-      show: admin.emailLink || admin.email,
-      color: "bg-yellow-500"
+      label: `${admin.customLinkTitle}`,
+      href: `${admin.customLink}`,
+      show: admin.customLink,
     }
   ];
 
@@ -159,7 +157,7 @@ export default function RatingPage() {
       <div className="w-full max-w-sm mx-auto space-y-6">
         {/* Profile Section */}
         <div className="text-center">
-          <div className="relative w-[100px] h-[100px] rounded-full overflow-hidden shadow-2xl mx-auto mb-4 ring-4 ring-white/20">
+          <div className="relative w-[100px] h-[100px] rounded-full overflow-hidden shadow-2xl mx-auto mt-6 mb-4">
             <Image
               src={admin.shopImage}
               alt={admin.shopName}
@@ -169,9 +167,15 @@ export default function RatingPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
           </div>
           
-          <h1 className="text-2xl font-semibold text-white mt-2">
-            {admin.shopName}
-          </h1>
+          <h1 style={{
+  fontSize: '1.5rem',
+  fontWeight: 595,
+  color: 'white',
+  letterSpacing: '-0.03em',
+  margin: 0
+}}>
+  {admin.shopName}
+</h1>
         </div>
 
         {/* Column-based Social Links */}
@@ -184,16 +188,20 @@ export default function RatingPage() {
               rel="noopener noreferrer"
               className="block w-full"
             >
-              <div className="bg-black hover:bg-gray-800 rounded-2xl p-4 transition-colors duration-200 border border-gray-700">
+             <div className="bg-black hover:scale-102 hover:shadow-[0_0_10px_2px_rgba(34,211,238,0.5)] active:scale-95 rounded-2xl p-4 transition-all duration-300 ease-out border border-gray-700">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`${link.color} p-2 rounded-full`}>
-                      <link.icon size={20} className="text-white" />
-                    </div>
-                    <span className="text-white font-medium">{link.label}</span>
-                  </div>
-                  <ArrowRight size={20} className="text-gray-400" />
-                </div>
+  <div className="w-10 h-10 flex items-center justify-center">
+    {link.icon && (
+      <div className={`${link.color} p-2 rounded-full`}>
+        <link.icon size={20} className="text-white" />
+      </div>
+    )}
+  </div>
+  <span className="text-white font-semibold flex-1 text-center">{link.label}</span>
+  <div className="w-10 h-10 flex items-center justify-center">
+    <ArrowRight size={20} className="text-gray-400" />
+  </div>
+</div>
               </div>
             </a>
           ))}

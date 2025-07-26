@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { User, Store, Camera, Lock, ExternalLink, Eye, EyeOff } from "lucide-react";
-import Stepper, { Step } from "../../component/Stepper";
+import Stepper, { Step } from "../../../component/Stepper";
 import Link from "next/link";
 import Image from "next/image";
 import Swal from "sweetalert2";

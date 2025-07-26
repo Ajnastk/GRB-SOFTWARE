@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { Instagram, Phone, X, Globe, ArrowRight } from 'lucide-react';
 import Image from "next/image";
-import TextInput from "../../component/textInput";
+import TextInput from "../../../component/textInput";
 
 export default function RatingPage() {
   const [admin, setAdmin] = useState(null);

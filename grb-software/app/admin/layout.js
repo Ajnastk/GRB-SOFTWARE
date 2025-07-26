@@ -10,9 +10,10 @@ export default function AdminLayout({ children }) {
   const pathname = usePathname();
 
   // Don't show sidebar and header on login page
-  if (pathname === '/admin/login') {
-    return <div className="min-h-screen">{children}</div>;
-  }
+  const noLayoutRoutes = ['/admin/login', '/admin/signup', '/admin'];
+  if (noLayoutRoutes.includes(pathname)) {
+  return <div className="min-h-screen">{children}</div>;
+}
 
   return (
     <div className="min-h-screen bg-gray-50">

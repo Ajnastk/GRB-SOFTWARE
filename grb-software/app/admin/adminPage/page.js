@@ -1,6 +1,5 @@
 "use client";
 
-import Link from 'next/link';
 import ReviewList from '../../../component/reviewList';
 import { useReviewStats } from '../../../hooks/useReviewStats';
 import { Bar } from 'react-chartjs-2';

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import Stepper, { Step } from "../../component/Stepper";
+import Stepper, { Step } from "../../../component/Stepper";
 import Swal from "sweetalert2"; // Assuming Stepper is in this path
 
 export default function LoginPage() {

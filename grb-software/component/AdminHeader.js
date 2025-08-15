@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function AdminHeader({ onMenuClick }) {
+export default function AdminHeader({ onMenuClick, admin }) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
@@ -98,9 +98,9 @@ export default function AdminHeader({ onMenuClick }) {
               className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
             >
               <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                A
+                {admin?.name ? admin.name[0].toUpperCase() : "A"}
               </div>
-              <span className="hidden sm:block text-sm font-medium text-gray-700">Admin</span>
+              <span className="hidden sm:block text-sm font-medium text-gray-700">{admin?.name || "Admin"}</span>
               <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
@@ -110,8 +110,8 @@ export default function AdminHeader({ onMenuClick }) {
             {showProfile && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                 <div className="px-4 py-2 border-b border-gray-100">
-                  <p className="text-sm font-medium text-gray-900">Admin User</p>
-                  <p className="text-xs text-gray-500">admin@example.com</p>
+                  <p className="text-sm font-medium text-gray-900">{admin?.name || "Admin User"}</p>
+                  <p className="text-xs text-gray-500">{admin?.email || "admin@example.com"}</p>
                 </div>
                 <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                   <span className="mr-3">👤</span>

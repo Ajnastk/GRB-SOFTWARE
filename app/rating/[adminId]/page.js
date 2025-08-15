@@ -7,14 +7,14 @@ import Image from "next/image";
 import TextInput from "../../../component/textInput";
 
 export default function RatingPage() {
-  const [admin, setAdmin] = useState(null);
+  const [linkData, setLinkData] = useState(null);
   const [selectedRating, setSelectedRating] = useState(0);
   const [textInput, setTextInput] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const params = useParams();
-  const adminId = params?.adminId;
+  const linkId = params?.id;
 
   const apiUrl = process.env.NODE_ENV === 'development'
     ? process.env.NEXT_PUBLIC_API_URL_DEV
@@ -22,19 +22,19 @@ export default function RatingPage() {
 
   useEffect(() => {
     const fetchAdmin = async () => {
-      if (!adminId) return;
+      if (!linkId) return;
       
       try {
         setLoading(true);
         setError(null);
         
-        const res = await fetch(`${apiUrl}/api/admin/${adminId}`);
+        const res = await fetch(`${apiUrl}/api/links/${linkId}`);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         
         const data = await res.json();
-        setAdmin(data);
+        setLinkData(data);
       } catch (err) {
         console.error('Error fetching admin:', err);
         setError('Failed to load admin data');
@@ -44,7 +44,7 @@ export default function RatingPage() {
     };
 
     fetchAdmin();
-  }, [adminId, apiUrl]);
+  }, [linkId, apiUrl]);
 
   const handleRatingChange = async (rating) => {
     setSelectedRating(rating);
@@ -52,7 +52,7 @@ export default function RatingPage() {
 
     if (rating >= 4) {
       try {
-        const res = await fetch(`${apiUrl}/api/review-submit/${adminId}`, {
+        const res = await fetch(`${apiUrl}/api/review-submit/${linkId}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ rating }),
@@ -78,7 +78,7 @@ export default function RatingPage() {
     }
     
     try {
-      const res = await fetch(`${apiUrl}/api/review-submit/${adminId}`, {
+      const res = await fetch(`${apiUrl}/api/review-submit/${linkId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ rating: selectedRating, description: textInput }),
@@ -115,7 +115,7 @@ export default function RatingPage() {
     );
   }
 
-  if (!admin) {
+  if (!linkId) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
         <div className="text-white text-lg">Admin not found</div>
@@ -159,8 +159,8 @@ export default function RatingPage() {
         <div className="text-center">
           <div className="relative w-[100px] h-[100px] rounded-full overflow-hidden shadow-2xl mx-auto mt-6 mb-4">
             <Image
-              src={admin.shopImage}
-              alt={admin.shopName}
+              src={linkId.shopImage}
+              alt={linkId.shopName}
               fill
               className="object-cover"
             />
@@ -174,7 +174,7 @@ export default function RatingPage() {
   letterSpacing: '-0.03em',
   margin: 0
 }}>
-  {admin.shopName}
+  {linkId.shopName}
 </h1>
         </div>
 

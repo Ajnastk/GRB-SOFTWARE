@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import ReviewModel from "@/lib/models/ReviewSchema";
 import jwt from "jsonwebtoken";
+import { Link } from "lucide-react";
 
 export async function GET(req) {
   await dbConnect();
@@ -27,7 +28,20 @@ export async function GET(req) {
       );
     }
 
-    const reviews = await ReviewModel.find({ adminId });
+    const adminLinks = await Link.find({ adminId : adminId }).select('_id shopName');
+
+      if (!adminLinks || adminLinks.length === 0) {
+      return NextResponse.json([], { status: 200 }); // Return empty array if no links found
+    }
+
+    const linkIds = adminLinks.map(link => link._id);
+
+     // Find all reviews for these links
+    const reviews = await ReviewModel.find({ 
+      linkId: { $in: linkIds } 
+    }).populate('linkId', 'shopName').sort({ createdAt: -1 });
+
+
 
     return NextResponse.json(reviews, { status: 200 });
   } catch (error) {

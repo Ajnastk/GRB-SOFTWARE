@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import ReviewModel from "@/lib/models/ReviewSchema";
-import AdminModel from "@/lib/models/AdminSchema";
+import LinkModal from "@/lib/models/LinkSchema";
+import { create } from "qrcode";
 
 export async function POST(req, { params }) {
   try {
-   const { adminId } = await params; 
+   const { id } = await params; 
    await dbConnect();
     const { rating, description } = await req.json();
 
-    if (!adminId) {
+    if (!id) {
       return NextResponse.json({ error: "AdminId is not found" }, { status: 400 });
     }
 
@@ -21,10 +22,19 @@ export async function POST(req, { params }) {
         );
       }
 
+      const linkData = await LinkModal.findById(id).lean();
+      if(!linkData){
+        return NextResponse.json(
+          { error: "Link not found." },
+          { status: 404 }
+        );
+      }
+
       const newReview = new ReviewModel({
         description: description.trim(),
         rating,
-        adminId,
+        linkId : id,
+        createdAt: new Date(),
       });
 
       await newReview.save();
@@ -34,9 +44,9 @@ export async function POST(req, { params }) {
         { status: 200 }
       );
     } else if (rating >= 4) {
-      const adminData = await AdminModel.findById(adminId);
+      const LinkData = await LinkModal.findById(id).lean();
 
-      if (!adminData || !adminData.googleLink) {
+      if (!LinkData || !LinkData.googleLink) {
         return NextResponse.json(
           { error: "Google review link is not configured." },
           { status: 500 }
@@ -44,7 +54,7 @@ export async function POST(req, { params }) {
       }
 
       return NextResponse.json(
-        { redirectUrl: adminData.googleLink },
+        { redirectUrl: LinkData.googleLink },
         { status: 200 }
       );
     }

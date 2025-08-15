@@ -10,6 +10,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
   const navigation = [
     { name: "Dashboard", href: "/admin/adminPage", icon: "📊" },
     { name: "Reviews", href: "/admin/reviews", icon: "⭐" },
+    {name : "Links", href: "/admin/links", icon: "🔗"},
     // Uncomment to add more items
     // { name: "Links", href: "/admin/links", icon: "🔗" },
     // { name: "Analytics", href: "/admin/analytics", icon: "📈" },

@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import ReviewModel from "@/lib/models/ReviewSchema";
+import LinkModel from "@/lib/models/LinkSchema";
 import jwt from "jsonwebtoken";
-import { Link } from "lucide-react";
+
 
 export async function GET(req) {
   await dbConnect();
+
+  console.log("Fetching reviews...");
 
   try {
     const authHeader = req.headers.get("authorization");
@@ -18,6 +21,8 @@ export async function GET(req) {
       );
     }
 
+    console.log("Token received:", token);
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const adminId = decoded.adminId;
 
@@ -28,7 +33,11 @@ export async function GET(req) {
       );
     }
 
-    const adminLinks = await Link.find({ adminId : adminId }).select('_id shopName');
+    console.log("Admin ID:", adminId);
+
+    const adminLinks = await LinkModel.find({ adminId : adminId }).select('_id shopName').lean();
+
+    console.log("Admin links found:", adminLinks.length);
 
       if (!adminLinks || adminLinks.length === 0) {
       return NextResponse.json([], { status: 200 }); // Return empty array if no links found
@@ -40,6 +49,8 @@ export async function GET(req) {
     const reviews = await ReviewModel.find({ 
       linkId: { $in: linkIds } 
     }).populate('linkId', 'shopName').sort({ createdAt: -1 });
+
+    console.log("Reviews fetched:", reviews.length);
 
 
 

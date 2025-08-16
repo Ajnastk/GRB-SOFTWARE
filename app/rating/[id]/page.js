@@ -21,7 +21,7 @@ export default function RatingPage() {
     : process.env.NEXT_PUBLIC_API_URL_PROD;
 
   useEffect(() => {
-    const fetchAdmin = async () => {
+    const fetchLinkData = async () => {
       if (!linkId) return;
       
       try {
@@ -36,15 +36,15 @@ export default function RatingPage() {
         const data = await res.json();
         setLinkData(data);
       } catch (err) {
-        console.error('Error fetching admin:', err);
-        setError('Failed to load admin data');
+        console.error('Error fetching link data:', err);
+        setError('Failed to load shop data');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAdmin();
-  }, [linkId, apiUrl]);
+    fetchLinkData();
+  }, [linkId]);
 
   const handleRatingChange = async (rating) => {
     setSelectedRating(rating);
@@ -115,10 +115,10 @@ export default function RatingPage() {
     );
   }
 
-  if (!linkId) {
+  if (!linkData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
-        <div className="text-white text-lg">Admin not found</div>
+        <div className="text-white text-lg">Shop not found</div>
       </div>
     );
   }
@@ -126,29 +126,29 @@ export default function RatingPage() {
   const socialLinks = [
     {
       label: "WhatsApp",
-      href: `https://wa.me/${admin.whatsappNumber}`,
+      href: `https://wa.me/${linkData.whatsappNumber}`,
       // icon: Phone,
-      show: admin.whatsappNumber,
+      show: linkData.whatsappNumber,
       // color: "bg-green-500"
     },
     {
       label: "Instagram", 
-      href: admin.instagramLink,
+      href: linkData.instagramLink,
       // icon: Instagram,
-      show: admin.instagramLink,
+      show: linkData.instagramLink,
       // color: "bg-pink-500"
     },
     {
       label: "Website",
-      href: admin.portfolioLink,
+      href: linkData.portfolioLink,
       // icon: Globe,
-      show: admin.portfolioLink,
+      show: linkData.portfolioLink,
       // color: "bg-blue-500"
     },
     {
-      label: `${admin.customLinkTitle}`,
-      href: `${admin.customLink}`,
-      show: admin.customLink,
+      label: `${linkData.customLinkTitle}`,
+      href: `${linkData.customLink}`,
+      show: linkData.customLink,
     }
   ];
 
@@ -159,8 +159,8 @@ export default function RatingPage() {
         <div className="text-center">
           <div className="relative w-[100px] h-[100px] rounded-full overflow-hidden shadow-2xl mx-auto mt-6 mb-4">
             <Image
-              src={linkId.shopImage}
-              alt={linkId.shopName}
+              src={linkData.shopImage}
+              alt={linkData.shopName}
               fill
               className="object-cover"
             />
@@ -174,7 +174,7 @@ export default function RatingPage() {
   letterSpacing: '-0.03em',
   margin: 0
 }}>
-  {linkId.shopName}
+  {linkData.shopName}
 </h1>
         </div>
 

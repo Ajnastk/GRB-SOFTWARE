@@ -16,7 +16,13 @@ export default function ReviewList({
 
   useEffect(() => {
     const fetchReviews = async () => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token") || localStorage.getItem("adminToken");
+
+      if(!token) {
+        setError("No authentication token found");
+        setLoading(false);
+        return;
+      } 
 
       try {
         const apiUrl = (process.env.NODE_ENV === "development"
@@ -36,6 +42,8 @@ export default function ReviewList({
         console.log("Raw response:", rawResponse);
 
         if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error fetching reviews:", errorData);
           throw new Error("Failed to fetch reviews");
         }
 

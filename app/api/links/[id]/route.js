@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
-import Link from "@/lib/models/LinkSchema";
+import LinkModal from "@/lib/models/LinkSchema";
 import mongoose from "mongoose";
 
 export async function GET(req, { params }){
     await dbConnect();
      try{
-        const { id } = params; 
+        const { id } = await params; 
         if (!mongoose.Types.ObjectId.isValid(id)){
             return NextResponse.json({ error: "Invalid link ID" }, {status: 400 });
         }
-        const link = await Link.findById(id);
+        const link = await LinkModal.findById(id);
         if (!link) {
             return NextResponse.json({ error: "Link not found" }, { status: 404 });
         }   
@@ -25,13 +25,13 @@ export async function GET(req, { params }){
 export async function PUT(req, {params}) {
     await dbConnect();
     try {
-        const { id } = params;
+        const { id } =await params;
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return NextResponse.json({ error: "Invalid link ID" }, { status: 400 });
         }
 
         const body = await req.json();
-        const updatedLink = await Link.findByIdAndUpdate(id, body, { new: true });
+        const updatedLink = await LinkModal.findByIdAndUpdate(id, body, { new: true });
 
         if (!updatedLink) {
             return NextResponse.json({ error: "Link not found" }, { status: 404 });
@@ -47,12 +47,12 @@ export async function PUT(req, {params}) {
 export async function DELETE(req, { params }) {
     await dbConnect();
     try {
-        const { id } = params;
+        const { id } =await params;
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return NextResponse.json({ error: "Invalid link ID" }, { status: 400 });
         }
 
-        const deletedLink = await Link.findByIdAndDelete(id);
+        const deletedLink = await LinkModal.findByIdAndDelete(id);
         if (!deletedLink) {
             return NextResponse.json({ error: "Link not found" }, { status: 404 });
         }

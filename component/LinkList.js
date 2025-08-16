@@ -35,9 +35,11 @@ export default function LinkList({
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log("response status:",response.status);
       if (response.ok) {
         const data = await response.json();
         setLinks(data);
+        console.log("Links datas:",data)
       }
     } catch (error) {
       console.error("Error fetching links:", error);

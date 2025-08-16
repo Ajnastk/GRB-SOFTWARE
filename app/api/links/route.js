@@ -3,6 +3,7 @@ import dbConnect from "@/lib/dbConnect";
 import LinkModel from "@/lib/models/LinkSchema";
 import cloudinary from "@/lib/cloudinaryConfig";
 import QRCode from "qrcode";
+import jwt from "jsonwebtoken";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -10,6 +11,21 @@ export const dynamic = "force-dynamic";
 export async function POST(req) {
   try {
     await dbConnect();
+
+    const authHeader = req.headers.get("authorization");
+    const token = authHeader?.split(" ")[1];
+
+    if(!token) {
+      return NextResponse.json( { error: "Authorization token is required" }, { status: 401 });
+    };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const adminId = decoded.adminId;
+
+    if (!adminId) {
+      return NextResponse.json({ error: "Invalid token, adminId not found" }, { status: 400 });
+    }
+
+    console.log("creating link for adminId:", adminId);
 
     const formData = await req.formData();
 
@@ -102,7 +118,25 @@ export async function GET(req) {
   try {
     await dbConnect();
 
-    const links = await LinkModel.find().sort({ createdAt: -1 });
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader) {
+      return NextResponse.json({ error: "Authorization token is required" }, { status: 401 });
+    }
+      
+    const token = authHeader?.split(" ")[1];
+    if (!token) {
+      return NextResponse.json({ error: "Authorization token is required" }, { status: 401 });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const adminId = decoded.adminId;
+
+    if (!adminId) { 
+      return NextResponse.json({ error: "Invalid token, adminId not found" }, { status: 400 });
+    }
+
+    const links = await LinkModel.find({adminId}).sort({ createdAt: -1 });
+    console.log("found link for admin:", links.length);
 
     return NextResponse.json(links, { status: 200 });
   } catch (error) {

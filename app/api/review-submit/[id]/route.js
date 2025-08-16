@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import ReviewModel from "@/lib/models/ReviewSchema";
 import LinkModal from "@/lib/models/LinkSchema";
-import { create } from "qrcode";
 
 export async function POST(req, { params }) {
   try {
@@ -34,6 +33,9 @@ export async function POST(req, { params }) {
         description: description.trim(),
         rating,
         linkId : id,
+        adminId :linkData.adminId,
+        customerName: "Anonymous",
+        shopName: linkData.shopName || "Unknown Shop",
         createdAt: new Date(),
       });
 

@@ -59,6 +59,7 @@ export async function POST(req) {
     }
 
     const newLink = new LinkModel({
+      adminId,
       shopName: shopName.trim(),
       googleLink: googleLink.trim(),
       instagramLink: instagramLink.trim(),

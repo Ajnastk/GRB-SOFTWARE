@@ -21,6 +21,8 @@ export default function AddLinkModal({ onClose, onSuccess }) {
     setLoading(true);
     
     try {
+      const token = localStorage.getItem("token") || localStorage.getItem("adminToken");
+
       const formDataToSend = new FormData();
       
       Object.keys(formData).forEach(key => {
@@ -31,6 +33,9 @@ export default function AddLinkModal({ onClose, onSuccess }) {
 
       const response = await fetch('/api/links', {
         method: 'POST',
+        headers:{
+          authorization : `Bearer ${token}`,
+        },
         body: formDataToSend,
       });
 

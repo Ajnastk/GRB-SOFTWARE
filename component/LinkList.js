@@ -12,6 +12,7 @@ export default function LinkList({
 }) {
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchLinks();
@@ -19,7 +20,21 @@ export default function LinkList({
 
   const fetchLinks = async () => {
     try {
-      const response = await fetch("/api/links");
+      const token = localStorage.getItem("token") || localStorage.getItem("adminToken");
+      if (!token) { 
+        setError("No authentication token found");
+        setLoading(false);
+        return;
+      }
+      console.log("Fetching links with token:", token);
+
+      const response = await fetch("/api/links",{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setLinks(data);

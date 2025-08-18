@@ -7,44 +7,44 @@ import Image from "next/image";
 import TextInput from "../../../component/textInput";
 
 export default function RatingPage() {
-  const [admin, setAdmin] = useState(null);
+  const [linkData, setLinkData] = useState(null);
   const [selectedRating, setSelectedRating] = useState(0);
   const [textInput, setTextInput] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const params = useParams();
-  const adminId = params?.adminId;
+  const linkId = params?.id;
 
   const apiUrl = process.env.NODE_ENV === 'development'
     ? process.env.NEXT_PUBLIC_API_URL_DEV
     : process.env.NEXT_PUBLIC_API_URL_PROD;
 
   useEffect(() => {
-    const fetchAdmin = async () => {
-      if (!adminId) return;
+    const fetchLinkData = async () => {
+      if (!linkId) return;
       
       try {
         setLoading(true);
         setError(null);
         
-        const res = await fetch(`${apiUrl}/api/admin/${adminId}`);
+        const res = await fetch(`${apiUrl}/api/links/${linkId}`);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         
         const data = await res.json();
-        setAdmin(data);
+        setLinkData(data);
       } catch (err) {
-        console.error('Error fetching admin:', err);
-        setError('Failed to load admin data');
+        console.error('Error fetching link data:', err);
+        setError('Failed to load shop data');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAdmin();
-  }, [adminId, apiUrl]);
+    fetchLinkData();
+  }, [linkId]);
 
   const handleRatingChange = async (rating) => {
     setSelectedRating(rating);
@@ -52,7 +52,7 @@ export default function RatingPage() {
 
     if (rating >= 4) {
       try {
-        const res = await fetch(`${apiUrl}/api/review-submit/${adminId}`, {
+        const res = await fetch(`${apiUrl}/api/review-submit/${linkId}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ rating }),
@@ -78,7 +78,7 @@ export default function RatingPage() {
     }
     
     try {
-      const res = await fetch(`${apiUrl}/api/review-submit/${adminId}`, {
+      const res = await fetch(`${apiUrl}/api/review-submit/${linkId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ rating: selectedRating, description: textInput }),
@@ -115,10 +115,10 @@ export default function RatingPage() {
     );
   }
 
-  if (!admin) {
+  if (!linkData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
-        <div className="text-white text-lg">Admin not found</div>
+        <div className="text-white text-lg">Shop not found</div>
       </div>
     );
   }
@@ -126,29 +126,29 @@ export default function RatingPage() {
   const socialLinks = [
     {
       label: "WhatsApp",
-      href: `https://wa.me/${admin.whatsappNumber}`,
+      href: `https://wa.me/${linkData.whatsappNumber}`,
       // icon: Phone,
-      show: admin.whatsappNumber,
+      show: linkData.whatsappNumber,
       // color: "bg-green-500"
     },
     {
       label: "Instagram", 
-      href: admin.instagramLink,
+      href: linkData.instagramLink,
       // icon: Instagram,
-      show: admin.instagramLink,
+      show: linkData.instagramLink,
       // color: "bg-pink-500"
     },
     {
       label: "Website",
-      href: admin.portfolioLink,
+      href: linkData.portfolioLink,
       // icon: Globe,
-      show: admin.portfolioLink,
+      show: linkData.portfolioLink,
       // color: "bg-blue-500"
     },
     {
-      label: `${admin.customLinkTitle}`,
-      href: `${admin.customLink}`,
-      show: admin.customLink,
+      label: `${linkData.customLinkTitle}`,
+      href: `${linkData.customLink}`,
+      show: linkData.customLink,
     }
   ];
 
@@ -159,8 +159,8 @@ export default function RatingPage() {
         <div className="text-center">
           <div className="relative w-[100px] h-[100px] rounded-full overflow-hidden shadow-2xl mx-auto mt-6 mb-4">
             <Image
-              src={admin.shopImage}
-              alt={admin.shopName}
+              src={linkData.shopImage}
+              alt={linkData.shopName}
               fill
               className="object-cover"
             />
@@ -174,7 +174,7 @@ export default function RatingPage() {
   letterSpacing: '-0.03em',
   margin: 0
 }}>
-  {admin.shopName}
+  {linkData.shopName}
 </h1>
         </div>
 

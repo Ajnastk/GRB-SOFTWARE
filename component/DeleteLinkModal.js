@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function DeleteLinkModal({ link, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
@@ -47,7 +48,7 @@ export default function DeleteLinkModal({ link, onClose, onSuccess }) {
           <div className="bg-gray-50 rounded-lg p-4 mb-6">
             <div className="flex items-center space-x-3">
               {link.shopImage ? (
-                <img src={link.shopImage} alt={link.shopName} className="w-12 h-12 rounded-lg object-cover" />
+                <Image src={link.shopImage} alt={link.shopName} width={48} height={48} className="rounded-lg object-cover" />
               ) : (
                 <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

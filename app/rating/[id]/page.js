@@ -2,7 +2,20 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { Instagram, Phone, X, Globe, ArrowRight } from 'lucide-react';
+import {
+  Instagram,
+  Phone,
+  MessageCircle,
+  X,
+  Globe,
+  Facebook,
+  Twitter,
+  LinkedIn,
+  YouTube,
+  Snapchat,
+  Pinterest,
+  facebook,
+} from "lucide-react";
 import Image from "next/image";
 import TextInput from "../../../component/textInput";
 
@@ -16,28 +29,29 @@ export default function RatingPage() {
   const params = useParams();
   const linkId = params?.id;
 
-  const apiUrl = process.env.NODE_ENV === 'development'
-    ? process.env.NEXT_PUBLIC_API_URL_DEV
-    : process.env.NEXT_PUBLIC_API_URL_PROD;
+  const apiUrl =
+    process.env.NODE_ENV === "development"
+      ? process.env.NEXT_PUBLIC_API_URL_DEV
+      : process.env.NEXT_PUBLIC_API_URL_PROD;
 
   useEffect(() => {
     const fetchLinkData = async () => {
       if (!linkId) return;
-      
+
       try {
         setLoading(true);
         setError(null);
-        
+
         const res = await fetch(`${apiUrl}/api/links/${linkId}`);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
-        
+
         const data = await res.json();
         setLinkData(data);
       } catch (err) {
-        console.error('Error fetching link data:', err);
-        setError('Failed to load shop data');
+        console.error("Error fetching link data:", err);
+        setError("Failed to load shop data");
       } finally {
         setLoading(false);
       }
@@ -57,7 +71,7 @@ export default function RatingPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ rating }),
         });
-        
+
         const result = await res.json();
         if (result.redirectUrl) {
           window.location.href = result.redirectUrl;
@@ -65,7 +79,7 @@ export default function RatingPage() {
           alert(result.error || "Unable to redirect.");
         }
       } catch (err) {
-        console.error('Error submitting rating:', err);
+        console.error("Error submitting rating:", err);
         alert("Failed to submit rating. Please try again.");
       }
     }
@@ -76,14 +90,17 @@ export default function RatingPage() {
       alert("Please add a description for low ratings.");
       return;
     }
-    
+
     try {
       const res = await fetch(`${apiUrl}/api/review-submit/${linkId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rating: selectedRating, description: textInput }),
+        body: JSON.stringify({
+          rating: selectedRating,
+          description: textInput,
+        }),
       });
-      
+
       const result = await res.json();
       if (res.ok) {
         alert("Review submitted successfully.");
@@ -94,7 +111,7 @@ export default function RatingPage() {
         alert(result.error || "Failed to submit.");
       }
     } catch (err) {
-      console.error('Error submitting review:', err);
+      console.error("Error submitting review:", err);
       alert("Failed to submit review. Please try again.");
     }
   };
@@ -123,33 +140,56 @@ export default function RatingPage() {
     );
   }
 
+  const customLinkIcons = [
+    { name: "Facebook", icon: "facebook" },
+    { name: "Twitter", icon: "twitter" },
+    { name: "LinkedIn", icon: "linkedin" },
+    { name: "YouTube", icon: "youtube" },
+    { name: "TikTok", icon: "tiktok" },
+    { name: "Instagram", icon: "instagram" },
+    { name: "WhatsApp", icon: "message-circle" },
+    { name: "Website", icon: "globe" },
+    { name: "Blog", icon: "edit" },
+    { name: "Portfolio", icon: "briefcase" },
+    { name: "Email", icon: "mail" },
+    { name: "Coffee", icon: "coffee" },
+  ];
+
+  const getCustomLinkIcon = (title) => {
+    const iconData = customLinkIcons.find(
+      (item) => item.name.toLowerCase() === title.toLowerCase()
+    );
+
+    return iconData ? iconData.icon : "link"; // Default fallback
+  };
+
+  const customLinkIcon = getCustomLinkIcon(linkData.customLinkTitle);
+
   const socialLinks = [
     {
       label: "WhatsApp",
       href: `https://wa.me/${linkData.whatsappNumber}`,
-      // icon: Phone,
+      icon: MessageCircle,
       show: linkData.whatsappNumber,
-      // color: "bg-green-500"
     },
     {
-      label: "Instagram", 
+      label: "Instagram",
       href: linkData.instagramLink,
-      // icon: Instagram,
+      icon: Instagram,
       show: linkData.instagramLink,
-      // color: "bg-pink-500"
     },
     {
       label: "Website",
       href: linkData.portfolioLink,
-      // icon: Globe,
+      icon: Globe,
       show: linkData.portfolioLink,
-      // color: "bg-blue-500"
     },
     {
       label: `${linkData.customLinkTitle}`,
       href: `${linkData.customLink}`,
       show: linkData.customLink,
-    }
+      icon: customLinkIcon,
+    },
   ];
 
   return (
@@ -166,52 +206,36 @@ export default function RatingPage() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
           </div>
-          
-          <h1 style={{
-  fontSize: '1.5rem',
-  fontWeight: 595,
-  color: 'white',
-  letterSpacing: '-0.03em',
-  margin: 0
-}}>
-  {linkData.shopName}
-</h1>
-        </div>
 
-        {/* Column-based Social Links */}
-        <div className="space-y-3">
-          {socialLinks.filter(link => link.show).map((link, index) => (
-            <a
-              key={index}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full"
-            >
-             <div className="bg-black hover:scale-102 hover:shadow-[0_0_10px_2px_rgba(34,211,238,0.5)] active:scale-95 rounded-2xl p-4 transition-all duration-300 ease-out border border-gray-700">
-                <div className="flex items-center justify-between">
-  <div className="w-10 h-10 flex items-center justify-center">
-    {link.icon && (
-      <div className={`${link.color} p-2 rounded-full`}>
-        <link.icon size={20} className="text-white" />
-      </div>
-    )}
-  </div>
-  <span className="text-white font-semibold flex-1 text-center">{link.label}</span>
-  <div className="w-10 h-10 flex items-center justify-center">
-    <ArrowRight size={20} className="text-gray-400" />
-  </div>
-</div>
-              </div>
-            </a>
-          ))}
+          <h1
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: 595,
+              color: "white",
+              letterSpacing: "-0.03em",
+              margin: 0,
+            }}
+          >
+            {linkData.shopName}
+          </h1>
+
+          <p
+          style={{
+             fontSize: "0.875rem",
+             color: "white",
+             fontWeight :595,
+             letterSpacing: "-0.01em",
+             margin:0,}}> 
+            {linkData.description}
+          </p>
         </div>
 
         {/* Review Section */}
-        <div className={`bg-black/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 transition-all duration-500 ${
-          isVisible ? 'min-h-[350px]' : 'min-h-[200px]'
-        }`}>
-          
+        <div
+          className={`bg-black/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 transition-all duration-500 ${
+            isVisible ? "min-h-[350px]" : "min-h-[200px]"
+          }`}
+        >
           {/* Header */}
           <div className="text-center mb-6">
             <h2 className="text-lg font-bold text-white mb-1">
@@ -254,6 +278,59 @@ export default function RatingPage() {
           )}
         </div>
 
+        {/* Column-based Social Links */}
+        {/* <div className="space-y-3">
+          {socialLinks.filter(link => link.show).map((link, index) => (
+            <a
+              key={index}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full"
+            >
+             <div className=" hover:scale-102 hover:shadow-[0_0_10px_2px_rgba(34,211,238,0.5)] active:scale-95 rounded-2xl p-4 transition-all duration-300 ease-out border border-gray-700">
+                <div className="flex items-center justify-between">
+  <div className="w-10 h-10 flex items-center justify-center">
+    {link.icon && (
+      <div className={`${link.color} p-2 rounded-full`}>
+        <link.icon size={20} className="text-white" />
+      </div> 
+    )}       
+  </div>
+  <span className="text-white font-semibold flex-1 text-center">{link.label}</span>
+  <div className="w-10 h-10 flex items-center justify-center">
+    <ArrowRight size={20} className="text-gray-400" />
+  </div>
+</div>
+              </div>
+            </a>
+          ))}
+        </div> */}
+
+        <div className="flex items-center justify-center gap-4 flex-wrap">
+          {socialLinks
+            .filter((link) => link.show)
+            .map((link, index) => (
+              <a
+                key={index}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+              >
+                <div className="w-12 h-12 flex items-center justify-center rounded-full hover:scale-110 transition-all duration-300 ease-out">
+                  {link.icon && (
+                    <div
+                      className={`${link.color} p-3 rounded-full group-hover:shadow-lg`}
+                    >
+                      <link.icon size={24} className="text-white" />
+                    </div>
+                  )}
+                </div>
+              </a>
+            ))}
+        </div>
+
         {/* Footer */}
         <div className="text-center">
           <p className="text-gray-500 text-xs">
@@ -273,7 +350,7 @@ export default function RatingPage() {
             transform: translateY(0);
           }
         }
-        
+
         .animate-fadeIn {
           animation: fadeIn 0.5s ease-out;
         }

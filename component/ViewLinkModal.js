@@ -55,7 +55,7 @@ export default function ViewLinkModal({ link, onClose }) {
             )}
             <div>
               <h3 className="text-2xl font-bold text-gray-900">{link.shopName}</h3>
-              <p className="text-gray-600">Shop ID: {link._id}</p>
+              <p className="text-gray-600">Description: {link.description}</p>
               <div className="flex items-center mt-2">
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                   Active
@@ -188,8 +188,8 @@ export default function ViewLinkModal({ link, onClose }) {
               <h4 className="text-lg font-semibold text-gray-900">QR Code</h4>
               {link.qrCodePath ? (
                 <div className="text-center p-6 bg-gray-50 rounded-lg">
-                  <div className="inline-block p-4 bg-white rounded-lg shadow-sm">
-                    <img src={link.qrCodePath} alt="QR Code" className="w-48 h-48" />
+                  <div className="inline-block p-4 bg-white rounded-lg shadow-sm w-48 h-48">
+                    <Image src={link.qrCodePath} alt="QR Code" fill className="w-full h-full object-cover" />
                   </div>
                   <div className="mt-4">
                     <p className="text-sm text-gray-600 mb-3">

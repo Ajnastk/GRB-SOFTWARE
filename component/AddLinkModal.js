@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function AddLinkModal({ onClose, onSuccess }) {
   const [formData, setFormData] = useState({
     shopName: '',
+    description: '',
     googleLink: '',
     instagramLink: '',
     whatsappNumber: '',
@@ -80,8 +82,8 @@ export default function AddLinkModal({ onClose, onSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50 overflow-hidden">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl  max-h-full overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b">
           <h2 className="text-xl font-semibold text-gray-900">Create New Shop Link</h2>
           <button
@@ -104,7 +106,7 @@ export default function AddLinkModal({ onClose, onSuccess }) {
               <div className="flex-shrink-0">
                 {imagePreview ? (
                   <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-gray-300">
-                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    <Image src={imagePreview} alt="Preview" width={80} height={80}  className="w-full h-full  object-cover" />
                   </div>
                 ) : (
                   <div className="w-20 h-20 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
@@ -142,6 +144,21 @@ export default function AddLinkModal({ onClose, onSuccess }) {
               placeholder="Enter your shop name"
             />
           </div>
+
+          {/* description */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Description
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Brief description of your shop (optional)"
+              rows={3}
+            />
+            </div>
 
           {/* Social Media Links */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -30,6 +30,7 @@ export async function POST(req) {
     const formData = await req.formData();
 
     const shopName = formData.get("shopName") || "";
+    const description = formData.get("description") || "";
     const googleLink = formData.get("googleLink") || "";
     const instagramLink = formData.get("instagramLink") || "";
     const whatsappNumber = formData.get("whatsappNumber") || "";
@@ -61,6 +62,7 @@ export async function POST(req) {
     const newLink = new LinkModel({
       adminId,
       shopName: shopName.trim(),
+      description: description.trim(),
       googleLink: googleLink.trim(),
       instagramLink: instagramLink.trim(),
       whatsappNumber: whatsappNumber.trim(),

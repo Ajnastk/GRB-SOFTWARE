@@ -3,27 +3,64 @@ import dbConnect from "@/lib/dbConnect";
 import LinkModel from "@/lib/models/LinkSchema";
 import cloudinary from "@/lib/cloudinaryConfig";
 import QRCode from "qrcode";
+import { cookies } from 'next/headers';
+import { jwtVerify } from 'jose';
 import jwt from "jsonwebtoken";
+import { headers } from "next/headers";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+
+async function getAdminIdFromCookie() {
+  const token = cookies().get('auth-token')?.value || '';
+  if (!token) return { error: 'missing' };
+  try {
+    const { payload } = await jwtVerify(token, secret); // HS256 matches your SignJWT [9]
+    if (!payload?.adminId) return { error: 'no-admin' };
+    return { adminId: String(payload.adminId) };
+  } catch (e) {
+    return { error: 'invalid' };
+  }
+}
 
 export async function POST(req) {
   try {
     await dbConnect();
 
-    const authHeader = req.headers.get("authorization");
-    const token = authHeader?.split(" ")[1];
+    // const authHeader = req.headers.get("authorization");
+    // const token = authHeader?.split(" ")[1];
 
-    if(!token) {
-      return NextResponse.json( { error: "Authorization token is required" }, { status: 401 });
-    };
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const adminId = decoded.adminId;
+    // const hdrs = headers();
+    // const auth = hdrs.get('authorization') || '';
+    // const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
 
-    if (!adminId) {
-      return NextResponse.json({ error: "Invalid token, adminId not found" }, { status: 400 });
-    }
+    // if(!token) {
+    //   return NextResponse.json( { error: "Authorization token is required" }, { status: 401 });
+    // };
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // const adminId = decoded.adminId;
+
+    // if (!adminId) {
+    //   return NextResponse.json({ error: "Invalid token, adminId not found" }, { status: 400 });
+    // }
+
+    // const token = getBearerToken(req);
+    // if (!token) {
+    //   return NextResponse.json({ error: 'Authorization token is required or invalid' }, { status: 401 });
+    // }
+    // if (!process.env.JWT_SECRET) {
+    //   return NextResponse.json({ error: 'Server misconfigured: JWT_SECRET not set' }, { status: 500 });
+    // }
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // const adminId = decoded.adminId;
+    // if (!adminId) {
+    //   return NextResponse.json({ error: 'Invalid token, adminId not found' }, { status: 400 });
+    // }
+
+     const { adminId, error } = await getAdminIdFromCookie();
+  if (error) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); // cookie missing/invalid [1]
 
     console.log("creating link for adminId:", adminId);
 
@@ -121,22 +158,35 @@ export async function GET(req) {
   try {
     await dbConnect();
 
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader) {
-      return NextResponse.json({ error: "Authorization token is required" }, { status: 401 });
-    }
+    // const authHeader = req.headers.get("authorization");
+    // if (!authHeader) {
+    //   return NextResponse.json({ error: "Authorization token is required" }, { status: 401 });
+    // }
       
-    const token = authHeader?.split(" ")[1];
-    if (!token) {
-      return NextResponse.json({ error: "Authorization token is required" }, { status: 401 });
-    }
+    // const token = authHeader?.split(" ")[1];
+    // if (!token) {
+    //   return NextResponse.json({ error: "Authorization token is required" }, { status: 401 });
+    // }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const adminId = decoded.adminId;
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // const adminId = decoded.adminId;
 
-    if (!adminId) { 
-      return NextResponse.json({ error: "Invalid token, adminId not found" }, { status: 400 });
-    }
+    // if (!adminId) { 
+    //   return NextResponse.json({ error: "Invalid token, adminId not found" }, { status: 400 });
+    // }
+
+    //  const token = getBearerToken(req);
+    // if (!token) {
+    //   return NextResponse.json({ error: 'Authorization token is required or invalid' }, { status: 401 });
+    // }
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // const adminId = decoded.adminId;
+    // if (!adminId) {
+    //   return NextResponse.json({ error: 'Invalid token, adminId not found' }, { status: 400 });
+    // }
+
+    const { adminId, error } = await getAdminIdFromCookie();
+    if (error) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const links = await LinkModel.find({adminId}).sort({ createdAt: -1 });
     console.log("found link for admin:", links.length);

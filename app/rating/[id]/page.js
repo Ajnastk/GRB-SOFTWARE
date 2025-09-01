@@ -58,7 +58,7 @@ export default function RatingPage() {
     };
 
     fetchLinkData();
-  }, [linkId]);
+  }, [linkId,apiUrl]);
 
   const handleRatingChange = async (rating) => {
     setSelectedRating(rating);

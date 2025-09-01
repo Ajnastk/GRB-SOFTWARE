@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+
+import { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import AdminSidebar from '@/component/AdminSidebar';
 import AdminHeader from '@/component/AdminHeader';
-import { useRouter } from 'next/navigation';
 
 export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -26,7 +26,6 @@ export default function AdminLayout({ children }) {
       .then(data => setAdmin(data));
   }, []);
 
-  // Don't show sidebar and header on login page
   const noLayoutRoutes = ['/admin/login', '/admin/signup', '/admin'];
   if (noLayoutRoutes.includes(pathname)) {
     return <div className="min-h-screen">{children}</div>;

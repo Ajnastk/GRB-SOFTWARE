@@ -33,7 +33,13 @@ export default function AddLinkModal({ onClose, onSuccess }) {
         }
       });
 
-      const response = await fetch('/api/links', {
+      const apiUrl = 
+        process.env.NODE_ENV === 'development'
+        ? process.env.NEXT_PUBLIC_API_URL_DEV
+        : process.env.NEXT_PUBLIC_API_URL_PROD;
+
+
+      const response = await fetch(`${apiUrl}/api/links`, {
         method: 'POST',
         headers:{
           authorization : `Bearer ${token}`,

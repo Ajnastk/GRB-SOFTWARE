@@ -1,119 +1,56 @@
-// import { NextResponse } from 'next/server';
-// import { jwtVerify } from 'jose';
-
-// const PUBLIC_FILE = /\.(.*)$/;
-
-// export async function middleware(req) {
-//   const { pathname } = req.nextUrl;
-
-//   // Skip public files and Next.js internals
-//   if (
-//     pathname.startsWith('/_next') ||
-//     pathname.startsWith('/api/public') ||
-//     PUBLIC_FILE.test(pathname)
-//   ) {
-//     return NextResponse.next();
-//   }
-
-//   // Protect admin and review pages
-//   if (pathname.startsWith('/admin') || pathname.startsWith('/review')) {
-//     const authHeader = req.headers.get('authorization');
-//     if (!authHeader) {
-//       console.error("Authorization header missing");
-//       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-//     }
-
-//     const token = authHeader.split(' ')[1];
-//     if (!token) {
-//       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-//     }
-
-//     try {
-//       const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-//       const { payload } = await jwtVerify(token, secret);
-
-//       // Attach decoded info to request headers if needed
-//       const requestHeaders = new Headers(req.headers);
-//       requestHeaders.set('x-admin-id', payload.adminId);
-
-//       return NextResponse.next({
-//         request: { headers: requestHeaders },
-//       });
-//     } catch (error) {
-//       console.error("JWT verification failed:", error.message);
-//       return NextResponse.json({ message: "Invalid or expired token" }, { status: 401 });
-//     }
-//   }
-
-//   return NextResponse.next();
-// }
-
-// export const config = {
-//   matcher: [
-//     '/admin/:path*',
-//     '/review/:path*',
-//   ],
-// };
-
-// middleware.js
 import { NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
 
-const PUBLIC_FILE = /\.(.*)$/;
-
-async function verifyJWT(token) {
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-  return jwtVerify(token, secret); // HS256 by default; configure SignJWT accordingly
-}
-
 export async function middleware(req) {
-  const { pathname, searchParams } = req.nextUrl;
+  const { pathname } = req.nextUrl;
 
-  // Skip public files and Next.js internals
+  // Skip static files and API routes
   if (
     pathname.startsWith('/_next') ||
-    pathname.startsWith('/api/public') ||
-    PUBLIC_FILE.test(pathname)
+    pathname.startsWith('/api') ||
+    pathname.includes('.') // Static files
   ) {
     return NextResponse.next();
   }
 
-  // Protect admin and review pages
+  // *FIX 1*: More explicit public route checking
+  const publicRoutes = [
+    '/admin/login',
+    '/admin/signup',
+    '/admin/forgot-password',
+    '/admin/reset-password'
+  ];
+
+  const isPublicRoute = publicRoutes.some(route => pathname === route);
+  
+  if (isPublicRoute) {
+    console.log(`✅ Allowing public route: ${pathname}`); // Debug log
+    return NextResponse.next();
+  }
+
+  // *FIX 2*: Only protect admin routes (not API routes)
   if (pathname.startsWith('/admin') || pathname.startsWith('/review')) {
-    // Prefer cookie
-    let token = req.cookies.get('auth-token')?.value;
-
-    // Optional: fallback to Authorization header if present (useful for API fetches)
+    const token = req.cookies.get('auth-token')?.value;
+    
     if (!token) {
-      const authHeader = req.headers.get('authorization');
-      if (authHeader && authHeader.toLowerCase().startsWith('bearer ')) {
-        token = authHeader.slice(7);
-      }
-    }
-
-    if (!token) {
+      console.log(`❌ No token for ${pathname}, redirecting to login`);
       const loginUrl = req.nextUrl.clone();
       loginUrl.pathname = '/admin/login';
-      loginUrl.searchParams.set('from', pathname + (searchParams?.toString() ? `?${searchParams}` : ''));
+      loginUrl.searchParams.set('returnUrl', pathname);
       return NextResponse.redirect(loginUrl);
     }
 
     try {
-      const { payload } = await verifyJWT(token);
-
-      // Attach decoded info to request headers (available to server code, not client)
-      const requestHeaders = new Headers(req.headers);
-      if (payload.adminId) requestHeaders.set('x-admin-id', String(payload.adminId));
-      if (payload.role) requestHeaders.set('x-admin-role', String(payload.role));
-      if (payload.email) requestHeaders.set('x-admin-email', String(payload.email));
-      if (payload.name) requestHeaders.set('x-admin-name', String(payload.name));
-
-      return NextResponse.next({ request: { headers: requestHeaders } });
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+      await jwtVerify(token, secret);
+      console.log(`✅ Valid token for ${pathname}`);
+      return NextResponse.next();
     } catch (error) {
-      const loginUrl = req.nextUrl.clone();
-      loginUrl.pathname = '/admin/login';
-      loginUrl.searchParams.set('reason', 'expired');
-      return NextResponse.redirect(loginUrl);
+      console.log(`❌ Invalid token for ${pathname}:`, error.message);
+      
+      const response = NextResponse.redirect(new URL('/admin/login', req.url));
+      response.cookies.delete('auth-token');
+      return response;
     }
   }
 
@@ -121,6 +58,10 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/review/:path*'],
+  matcher: [
+    /*
+     * Match all request paths except API routes and static files
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
 };
-

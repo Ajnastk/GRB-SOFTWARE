@@ -61,38 +61,41 @@ export async function POST(req) {
     }
 
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-
-    // Include any claims needed by middleware/UI (e.g., name/email/role)
-    const payload = {
-      adminId: String(admin._id),
-      email: admin.email,
-      name: admin.name || "Admin",
-      role: admin.role || "admin",
+    const payload = { 
+      adminId: String(admin._id), 
+      email: admin.email, 
+      name: admin.name || 'Admin', 
+      role: admin.role || 'admin' 
     };
-
+    
     const token = await new SignJWT(payload)
-      .setProtectedHeader({ alg: "HS256" })
+      .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
-      .setExpirationTime("1h")
+      .setExpirationTime('1h')
       .sign(secret);
 
-    const res = NextResponse.json({ message: "Login successful" });
-
-    // HttpOnly cookie so middleware and server routes can read it
-    res.cookies.set("auth-token", token, {
+    const res = NextResponse.json({ 
+      message: 'Login successful',
+      user: { // *ADD*: Return user data to frontend
+        id: admin._id,
+        name: admin.name,
+        email: admin.email
+      }
+    });
+    
+    // *CRITICAL*: Set cookie with consistent attributes
+    res.cookies.set('auth-token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
       maxAge: 60 * 60, // 1 hour
     });
 
+    console.log('✅ Login successful, cookie set for:', admin.email); // Debug log
     return res;
   } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
+    console.error('❌ Login error:', error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }

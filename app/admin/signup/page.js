@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { User, Mail, Phone, Lock, Eye, EyeOff, Store } from "lucide-react";
+import { User, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import Stepper, { Step } from "../../../component/Stepper";
 import Swal from "sweetalert2";
 
@@ -104,80 +103,85 @@ export default function SignupPage() {
         >
           <Step>
             <form onSubmit={handleSubmit} autoComplete="on">
-              <div className="space-y-6">
-                <div className="text-center mb-8">
-                  <User className="mx-auto h-16 w-16 text-green-500 mb-4" />
-                  <h3 className="text-2xl font-bold text-gray-800">
-                    Create Admin Account
-                  </h3>
-                  <p className="text-gray-600">
-                    Fill in your details to get started
-                  </p>
+              <div className="space-y-4">
+                {/* Header - Compact */}
+                <div className="text-center mb-6">
+                  <User className="mx-auto h-12 w-12 text-blue-500 mb-3" />
+                  <h3 className="text-xl font-bold text-gray-800">Create Admin Account</h3>
+                  <p className="text-gray-600 text-sm">Fill in your details to get started</p>
                 </div>
 
-                <InputField
-                  label="Full Name"
-                  name="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="Your Shop Name"
-                  required
-                />
+                {/* Two Column Grid - Responsive */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <InputField
+                    label="Full Name"
+                    name="name"
+                    type="text"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Your Shop Name"
+                    autoComplete="name"
+                  />
 
-                <InputField
-                  label="Email Address"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="your@email.com"
-                  autoComplete="username"
-                  required
-                />
+                   <InputField
+                    label="Mobile Number"
+                    name="mobile"
+                    type="tel"
+                    value={formData.mobile}
+                    onChange={handleInputChange}
+                    placeholder="Enter mobile number"
+                    autoComplete="tel"
+                  />
 
-                <InputField
-                  label="Mobile Number"
-                  name="mobile"
-                  type="tel"
-                  value={formData.mobile}
-                  onChange={handleInputChange}
-                  placeholder="Enter mobile number"
-                  required
-                />
+                  
 
-                <InputField
-                  label="Password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  placeholder="Enter your password"
-                  autoComplete="new-password"
-                  showPassword={showPassword}
-                  setShowPassword={setShowPassword}
-                  required
-                />
+                   <div className="md:col-span-2">
+                    <InputField
+                    label="Email Address"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="your@email.com"
+                    autoComplete="username"
+                  />
+                  </div>
+                 
 
-                <InputField
-                  label="Confirm Password"
-                  name="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  placeholder="Confirm your password"
-                  autoComplete="new-password"
-                  showPassword={showConfirmPassword}
-                  setShowPassword={setShowConfirmPassword}
-                  required
-                />
+                  {/* Confirm Password spans full width */}
+                  
+                    <InputField
+                    label="Password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder="Enter your password"
+                    autoComplete="new-password"
+                    showPassword={showPassword}
+                    setShowPassword={setShowPassword}
+                  />
+                    <InputField
+                      label="Confirm Password"
+                      name="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={formData.confirmPassword}
+                      onChange={handleInputChange}
+                      placeholder="Confirm your password"
+                      autoComplete="new-password"
+                      showPassword={showConfirmPassword}
+                      setShowPassword={setShowConfirmPassword}
+                    />
+                  </div>
+                
 
+                {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full mt-8 flex items-center justify-center rounded-full bg-green-500 py-2 px-4 font-medium tracking-tight text-white transition hover:bg-green-600 active:bg-green-700 disabled:opacity-50"
+                  className="w-full mt-6 flex items-center justify-center rounded-full bg-green-500 py-2.5 px-4 font-medium tracking-tight text-white transition hover:bg-green-600 active:bg-green-700 disabled:opacity-50"
                   disabled={isLoading}
                 >
-                  Sign Up
+                  {isLoading ? 'Creating Account...' : 'Sign Up'}
                 </button>
               </div>
             </form>
@@ -188,20 +192,22 @@ export default function SignupPage() {
   );
 }
 
-function InputField({
-  label,
-  name,
-  type = "text",
-  value,
-  onChange,
-  placeholder,
-  showPassword,
+function InputField({ 
+  label, 
+  name, 
+  type = "text", 
+  value, 
+  onChange, 
+  children, 
+  placeholder, 
+  icon, 
+  showPassword, 
   setShowPassword,
-  required,
-  ...props
+  required, 
+  ...props 
 }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       <label htmlFor={name} className="block text-sm font-medium text-gray-700">
         {label}
       </label>
@@ -213,26 +219,21 @@ function InputField({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          required={required}
-          className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors pr-12"
+          required
+          className="w-full px-3 py-2.5 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition-colors pr-10"
           {...props}
         />
-        {name.toLowerCase().includes("password") && (
+        {(name === "password" || name === "confirmPassword") && (
           <button
             type="button"
-            onClick={() =>
-              setShowPassword && setShowPassword((prev) => !prev)
-            }
+            onClick={() => setShowPassword && setShowPassword((prev) => !prev)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-500 hover:text-blue-700 focus:outline-none"
             tabIndex={-1}
           >
-            {showPassword ? (
-              <Eye className="w-5 h-5" />
-            ) : (
-              <EyeOff className="w-5 h-5" />
-            )}
+            {showPassword ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
           </button>
         )}
+        {children}
       </div>
     </div>
   );

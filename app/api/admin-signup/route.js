@@ -2,10 +2,6 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import Admin from "@/lib/models/AdminSchema";
 import bcrypt from "bcryptjs";
-// import jwt from "jsonwebtoken";
-// import QRCode from "qrcode";
-// import cloudinary from "@/lib/cloudinaryConfig";
-// import formidable from "formidable";
 
 const URL = process.env.URL;
 
@@ -41,29 +37,12 @@ export async function POST(req) {
         process.env.NODE_ENV === 'development'
         ? process.env.NEXT_PUBLIC_API_URL_DEV
         : process.env.NEXT_PUBLIC_API_URL_PROD;
-
-
-    // Upload QR to Cloudinary 
-    // const uploadResult = await new Promise((resolve, reject) => {
-    //   const uploadStream = cloudinary.uploader.upload_stream(
-    //     { resource_type: "image", public_id: `qr_codes/${savedAdmin._id}` },
-    //     (error, result) => {
-    //       if (error) reject(error);
-    //       else resolve(result);
-    //     }
-    //   );
-    //   uploadStream.end(qrCodeBuffer);
-    // });
-
-    // Save QR URL to admin
-    // savedAdmin.qrCodePath = uploadResult.secure_url;
     await savedAdmin.save();
 
     return NextResponse.json(
       {
         message: "Admin successfully created",
         id: savedAdmin._id,
-      //   qrCodeUrl: uploadResult.secure_url,
       },
       { status: 201 }
     );

@@ -5,7 +5,99 @@
   --foreground: #171717;
   --font-sans: var(--font-inter);
 }
+@layer base {
+  :root {
+    /* Global Colors */
+    --global-bg-1: #0b0641;
+    --global-bg-2: #100f57;
+    --global-bg-3: #1777f7;
+    --global-bg-4: #302c5e;
+    --global-bg-5: #aaaaaa;
+    --global-bg-6: #c4c4c433;
+    --global-bg-7: #c4c4c47f;
+    --global-bg-8: #eaf2fe;
+    --global-bg-9: #edf5ff;
+    --global-bg-10: #fff9eb;
+    --global-bg-11: #ffffff;
+    
+    /* Global Text Colors */
+    --global-text-1: #1777f7;
+    --global-text-2: #1e2024;
+    --global-text-3: #667084;
+    --global-text-4: #bdbdbd;
+    --global-text-5: #d89925;
+    --global-text-6: #ffffff;
+    
+    /* Button Colors */
+    --button-bg-1: #0a92dd;
+    --button-bg-2: #ffffff0c;
+  }
+}
 
+@layer utilities {
+  /* Global Background Colors */
+  .bg-global-1 {
+    background-color: var(--global-bg-1);
+  }
+  .bg-global-2 {
+    background-color: var(--global-bg-2);
+  }
+  .bg-global-3 {
+    background-color: var(--global-bg-3);
+  }
+  .bg-global-4 {
+    background-color: var(--global-bg-4);
+  }
+  .bg-global-5 {
+    background-color: var(--global-bg-5);
+  }
+  .bg-global-6 {
+    background-color: var(--global-bg-6);
+  }
+  .bg-global-7 {
+    background-color: var(--global-bg-7);
+  }
+  .bg-global-8 {
+    background-color: var(--global-bg-8);
+  }
+  .bg-global-9 {
+    background-color: var(--global-bg-9);
+  }
+  .bg-global-10 {
+    background-color: var(--global-bg-10);
+  }
+  .bg-global-11 {
+    background-color: var(--global-bg-11);
+  }
+  
+  /* Global Text Colors */
+  .text-global-1 {
+    color: var(--global-text-1);
+  }
+  .text-global-2 {
+    color: var(--global-text-2);
+  }
+  .text-global-3 {
+    color: var(--global-text-3);
+  }
+  .text-global-4 {
+    color: var(--global-text-4);
+  }
+  .text-global-5 {
+    color: var(--global-text-5);
+  }
+  .text-global-6 {
+    color: var(--global-text-6);
+  }
+  
+  /* Button Colors */
+  .bg-button-1 {
+    background-color: var(--button-bg-1);
+  }
+  .bg-button-2 {
+    background-color: var(--button-bg-2);
+  }
+}
 
 @theme inline {
   --color-background: var(--background);

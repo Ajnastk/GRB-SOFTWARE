@@ -7,6 +7,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Stepper, { Step } from "../../../component/Stepper";
 import Swal from "sweetalert2"; // Assuming Stepper is in this path
+import { House, ChevronRight, ChevronDown } from "lucide-react";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -75,7 +76,9 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 px-4 flex items-center justify-center">
-      <div className="max-w-2xl w-full mx-auto">
+
+      
+        
         <Stepper
           initialStep={1}
           onFinalStepCompleted={handleSubmit}
@@ -102,9 +105,25 @@ export default function LoginPage() {
                   Register here
                 </Link>
               </p>
+
+               <div
+          className="flex items-center justify-center mt-10 mb-6 text-gray-600"
+        
+        >
+          <Link href="/" className="hover:text-gray-900">
+            <House color="#454545" size={20} strokeWidth={1.25} />
+          </Link>
+          <span className="mx-2">
+            <ChevronRight color="#454545" strokeWidth={1.25} />
+          </span>
+          <span className="text-gray-600 font-medium">Signin</span>
+        </div>
+      <div className="max-w-2xl w-full mx-auto"></div>
             </div>
           }
+          
         >
+          
           <Step>
             <form onSubmit={handleSubmit} autoComplete="on">
               <div className="space-y-6">
@@ -145,7 +164,6 @@ export default function LoginPage() {
           </Step>
         </Stepper>
       </div>
-    </div>
   );
 }
 

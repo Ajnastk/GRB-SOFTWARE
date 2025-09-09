@@ -6,6 +6,7 @@ import { User, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import Stepper, { Step } from "../../../component/Stepper";
 import Swal from "sweetalert2";
+import { House, ChevronRight, ChevronDown } from "lucide-react";
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -98,6 +99,18 @@ export default function SignupPage() {
                   Login here
                 </Link>
               </p>
+                <div
+          className="flex items-center justify-center mt-10 mb-6 text-gray-600"
+        
+        >
+          <Link href="/" className="hover:text-gray-900">
+            <House color="#454545" size={20} strokeWidth={1.25} />
+          </Link>
+          <span className="mx-2">
+            <ChevronRight color="#454545" strokeWidth={1.25} />
+          </span>
+          <span className="text-gray-600 font-medium">Signup</span>
+        </div>
             </div>
           }
         >

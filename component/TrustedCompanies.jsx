@@ -12,7 +12,7 @@ const TrustedCompanies = () => {
   ];
 
   return (
-    <section className="bg-global-11 py-12 lg:py-16 mt-[150px] sm:mt-[250px] md:mt-[400px] lg:mt-[450px]">
+    <section className="bg-global-11 py-12 lg:py-16 mt-[90px] sm:mt-[150px] md:mt-[250px] lg:mt-[300px]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl  ">
         <div className="text-center mb-12">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-kumbh font-semibold text-global-2">
